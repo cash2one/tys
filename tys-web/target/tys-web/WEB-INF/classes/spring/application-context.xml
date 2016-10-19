@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="
+           http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
+           http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.1.xsd">
+
+
+
+
+	<!-- Scans for application @Components to deploy -->
+	<context:component-scan base-package="com.tys.**.controller" />
+	<context:component-scan base-package="com.tys.**.service" />
+	<context:component-scan base-package="com.tys.**.entity" />
+	<!-- <context:component-scan base-package="com.tys.socket" /> -->
+
+	<!-- 加载Spring Context 工具类 -->
+	<bean class="com.tys.util.SpringContextUtil"/>
+
+	<!-- Imports the configurations of the different infrastructure systems 
+		of the application -->
+	<!-- <import resource="application-webflow.xml" />
+	<import resource="application-mvc.xml" />
+	<import resource="application-db.xml" />
+	<import resource="application-security.xml" />
+	<import resource="application-quartz.xml" /> -->
+
+
+</beans>

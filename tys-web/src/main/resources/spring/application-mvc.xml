@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:p="http://www.springframework.org/schema/p" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xsi:schemaLocation="
+		http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-3.1.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.1.xsd">
+
+	<!-- Enables controllers mapped with @RequestMapping annotations, formatting 
+		annotations @NumberFormat @DateTimeFormat, and JSR 303 style validation -->
+	<mvc:annotation-driven validator="validator">
+		<mvc:message-converters register-defaults="true">
+			<!-- 将StringHttpMessageConverter的默认编码设为UTF-8 -->
+			<bean class="org.springframework.http.converter.StringHttpMessageConverter">
+				<constructor-arg value="UTF-8" />
+			</bean>
+			<bean
+				class="com.alibaba.fastjson.support.spring.FastJsonHttpMessageConverter">
+				<property name="features">
+					<list>
+						<value>PrettyFormat</value>
+						<value>DisableCircularReferenceDetect</value>
+						<!-- <value>WriteDateUseDateFormat</value> -->
+					</list>
+				</property>
+			</bean>
+		</mvc:message-converters>
+	</mvc:annotation-driven>
+
+	<bean id="DisableCircularReferenceDetect" class="org.springframework.beans.factory.config.FieldRetrievingFactoryBean">  
+		<property name="staticField" value="com.alibaba.fastjson.serializer.SerializerFeature.DisableCircularReferenceDetect"></property>  
+	</bean>
+	<!-- 以下 validator ConversionService 在使用 mvc:annotation-driven 会 自动注册 -->
+	<bean id="validator"
+		class="org.springframework.validation.beanvalidation.LocalValidatorFactoryBean">
+		<property name="providerClass" value="org.hibernate.validator.HibernateValidator" />
+		<!-- 如果不加默认到 使用classpath下的 ValidationMessages.properties -->
+		<!-- <property name="validationMessageSource" ref="messageSource" /> -->
+	</bean>
+
+	<mvc:resources mapping="/resources/**" location="/resources/" />
+
+	<mvc:default-servlet-handler />
+
+	<!-- Maps request paths to flows in the flowRegistry; e.g. a path of /hotels/booking 
+		looks for a flow with id "hotels/booking". -->
+	<bean class="org.springframework.webflow.mvc.servlet.FlowHandlerMapping">
+		<property name="order" value="-1" />
+		<property name="flowRegistry" ref="flowRegistry" />
+	</bean>
+
+	<!-- Map paths directly to view names without controller processing. Use 
+		the view-name attribute if necessary: by convention the view name equals 
+		the path without the leading slash -->
+	<!-- <mvc:view-controller path="/" view-name="index" /> -->
+
+	<!-- Dispatches requests mapped to flows to FlowHandler implementations -->
+	<bean class="org.springframework.webflow.mvc.servlet.FlowHandlerAdapter">
+		<property name="flowExecutor" ref="flowExecutor" />
+		<!-- <property name="saveOutputToFlashScopeOnRedirect" value="true"/> -->
+	</bean>
+
+
+	<bean id="multipartResolver"
+		class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+	</bean>
+
+	<bean id="freemarkerConfig"
+		class="org.springframework.web.servlet.view.freemarker.FreeMarkerConfigurer">
+		<property name="templateLoaderPath" value="" />
+		<property name="freemarkerSettings">
+			<props>
+				<prop key="tag_syntax">auto_detect</prop>
+				<prop key="template_update_delay">5</prop>
+				<prop key="defaultEncoding">UTF-8</prop>
+				<prop key="url_escaping_charset">UTF-8</prop>
+				<prop key="locale">zh_CN</prop>
+				<prop key="boolean_format">true,false</prop>
+				<prop key="datetime_format">yyyy-MM-dd HH:mm:ss</prop>
+				<prop key="date_format">yyyy-MM-dd</prop>
+				<prop key="time_format">HH:mm:ss</prop>
+				<prop key="number_format">computer</prop>
+				<prop key="whitespace_stripping">true</prop>
+				<prop key="auto_import">
+					/WEB-INF/views/macro/html.html as html,
+					/WEB-INF/views/macro/excel/excel.html as excel
+				</prop>
+			</props>
+		</property>
+	</bean>
+
+	<bean id="fmViewResolver"
+		class="org.springframework.web.servlet.view.freemarker.FreeMarkerViewResolver">
+		<property name="viewClass" value="com.tys.config.ScmFreeMarkerView" />
+		<property name="contentType" value="text/html; charset=UTF-8" />
+		<property name="cache" value="true" />
+		<property name="prefix" value="/WEB-INF/views/" />
+		<property name="suffix" value=".html" />
+	</bean>
+
+	<!-- bean name view resolver -->
+	<!-- <bean class="org.springframework.web.servlet.view.BeanNameViewResolver" 
+		p:order="0" /> -->
+
+	<!-- 默认的视图解析器 在上边的解析错误时使用 (默认使用html)- -->
+	<!-- <bean id="defaultViewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver" 
+		p:order="3"> <property name="viewClass" value="org.springframework.web.servlet.view.JstlView" 
+		/> <property name="contentType" value="text/html" /> <property name="prefix" 
+		value="/WEB-INF/views/" /> <property name="suffix" value=".jsp" /> </bean> -->
+
+
+</beans>

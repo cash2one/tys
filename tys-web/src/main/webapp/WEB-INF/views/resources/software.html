@@ -1,0 +1,360 @@
+<!-- 以下内容将在导航条上通过jquery动态加载，实现局部刷新 -->
+<section class="content-header">
+	<h1>软件管理</h1>
+	<ol class="breadcrumb">
+		<li><a href="#"><i class="fa fa-home"></i> 首页</a></li>
+		<li class="active">资源管理</li>
+		<li class="active">软件管理</li>
+	</ol>
+</section>
+
+<section class="content">
+	<div class="row">
+		<div class="col-md-12">
+			<div class="box box-info">
+				<div class="box-header with-border">
+					<h3 class="box-title">软件列表</h3>
+				</div>
+				<div class="box-body">
+					<form id="searchForm" role="form">
+						<div class="row">
+							<div class="col-md-2">
+								<div class="form-group">
+									<label for="">软件名称</label> <input type="text" name="name"
+										class="form-control" placeholder="请输入软件名称">
+								</div>
+							</div>
+
+							<div class="col-md-2">
+								<div class="form-group">
+									<label for="">软件类型</label> <select name="type"
+										class="form-control">
+										<option value="-1" selected="selected">请选择软件类型</option>
+										<option value="0">安卓</option>
+										<option value="1">IOS</option>
+										<option value="10">学生卡</option>
+									</select>
+								</div>
+							</div>
+
+							<div class="col-md-1">
+								<div class="form-group">
+									<label>&nbsp;&nbsp;</label> <a id="search"
+										class="btn btn-block btn-social btn-info"> <i
+										class="fa fa-search"></i> 查询
+									</a>
+								</div>
+							</div>
+						</div>
+					</form>
+				</div>
+
+				<div class="box-footer">
+					<div class="row">
+						<div class="col-sm-2">
+							<a data-toggle='modal' href="#newModal"
+								class="btn btn-block btn-social btn-success"> <i
+								class="fa fa-plus"></i> 添加
+							</a>
+						</div>
+					</div>
+
+					<div class="row">
+						<div class="col-sm-12" style="padding: 20px;">
+							<table id="software_table" width="100%"
+								class="table table-bordered table-hover table-striped">
+								<thead>
+									<tr>
+										<th class="center" width="5%"><label> <input
+												type="checkbox" class="ace" id="selectAll" /> <span
+												class="lbl"></span>
+										</label></th>
+										<th>软件别名</th>
+										<th>软件类型</th>
+										<th>厂商</th>
+										<th>版本号</th>
+										<th>软件下载地址</th>
+										<th>更新说明</th>
+										<th>上传时间</th>
+										<th>操作</th>
+									</tr>
+								</thead>
+							</table>
+						</div>
+					</div>
+
+					<div class="container">
+						<div id="newModal" class="modal" aria-hidden="true">
+							<div class="modal-dialog" style="width: 45%">
+								<div class="modal-content">
+									<div class="modal-header">
+										<a class="close" data-dismiss="modal">×</a>
+										<h4 id="title">软件信息</h4>
+									</div>
+									<div class="modal-body">
+										<form id="newForm" class="form-horizontal" action="mergesoftware" method="post" role="form" enctype="multipart/form-data" target="hidden_frame">
+											<input type="hidden" id="softwareId" name="id">
+											<div class="form-group">
+												<label for="alias" class="col-sm-3 control-label">软件别名</label>
+												<div class="col-sm-6">
+													<input id="alias" name="alias" type="text"
+														class="form-control">
+												</div>
+											</div>
+											<div class="form-group">
+												<label for="name" class="col-sm-3 control-label">软件类型</label>
+												<div class="col-sm-6">
+
+													<select id="type" name="type" class="form-control">
+														<option></option>
+														<option value="0">安卓</option>
+														<option value="1">IOS</option>
+														<option value="10">学生卡</option>
+													</select>
+
+												</div>
+											</div>
+											<div class="form-group" id="pwd">
+												<label for="name" class="col-sm-3 control-label">厂商名称</label>
+												<div class="col-sm-6">
+
+													<input id="companyId" name="companyId" type="text"
+														class="form-control">
+
+												</div>
+											</div>
+											<div class="form-group">
+												<label for="phone" class="col-sm-3 control-label">版本号</label>
+												<div class="col-sm-6">
+
+													<input id="version" name="version" type="text"
+														class="form-control">
+
+												</div>
+											</div>
+											<div class="form-group">
+												<label class="col-sm-3 control-label">软件来源</label>
+												<div class="col-sm-6">
+													<input type="radio" id="s1" name="source" value="0" checked
+														style="position: absolute; opacity: 0;">&nbsp;&nbsp;本地文件&nbsp;&nbsp;&nbsp;
+
+													<input type="radio" id="s2" name="source" value="1"
+														style="position: absolute; opacity: 0;">&nbsp;&nbsp;第三方链接&nbsp;&nbsp;&nbsp;
+
+												</div>
+											</div>
+											<div class="form-group" id="div1">
+												<label class="col-sm-3 control-label">本地文件</label>
+												<div class="col-sm-6">
+													<input id="software" class="file-loading"
+														name="upload" type="file">
+													<div id="errorBlock" class="help-block"></div>
+												</div>
+												<span id="errorMsg" style="color: red;display: none;">请选择上传文件</span>
+											</div>
+											<div class="form-group" id="div2" style="display: none;">
+												<label class="col-sm-3 control-label">第三方链接</label>
+												<div class="col-sm-6">
+													<input id="tps" name="tps" type="text"
+														class="form-control">
+												</div>
+											</div>
+											<div class="form-group">
+												<label class="col-sm-3 control-label">更新描述</label>
+												<div class="col-sm-6">
+													<textarea rows="6" id="description" name="description" class="form-control"></textarea>
+												</div>
+											</div>
+										</form>
+										<iframe name='hidden_frame' id="hidden_frame" style='display:none'></iframe>
+									</div>
+									<div class="modal-footer">
+										<a href="#" id="newSubmit" class="btn btn-success">提交</a> <a
+											href="#" class="btn btn-default" data-dismiss="modal">取消</a>
+									</div>
+								</div>
+							</div>
+						</div>
+
+						<div id="deleteModal" class="modal modal-warning"
+							aria-hidden="true">
+							<div class="modal-dialog">
+								<div class="modal-content">
+									<div class="modal-header">
+										<a class="close" data-dismiss="modal">×</a>
+										<h4>警告</h4>
+									</div>
+									<div class="modal-body">
+										<p>你确定要删除这条信息吗？</p>
+									</div>
+									<div class="modal-footer">
+										<a id="del" href="#" class="btn btn-danger">确认</a> <a href="#"
+											class="btn btn-default" data-dismiss="modal">取消</a>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</section>
+
+<script>
+	var table, softwareId, validator;
+	$(function() {
+
+		$('#software').fileinput({
+			showPreview : false,
+			showUpload : false,
+			language : 'zh', // 设置语言
+			browseClass : "btn btn-primary", // 按钮样式
+			allowedFileExtensions : [ "apk","exe" ],
+			elErrorContainer: "#errorBlock"
+		});
+		
+		$('input[type="radio"]').iCheck({
+			radioClass : 'iradio_flat-green'
+		});
+
+		$('input[type="radio"]').on('ifChanged', function() {
+			var source = $(this).val();
+			if(source==0){
+				$('#div1').show();
+				$('#div2').hide();
+			}else{
+				$('#div2').show();
+				$('#div1').hide();
+			}
+		});
+		
+		var columns = [
+				{
+					data : 'id'
+				},
+				{
+					data : 'alias'
+				},
+				{
+					data : function(row){
+						if(row.type==0){
+							return "android";
+						}else if(row.type==1){
+							return "ios";
+						}else{
+							return "学生卡";
+						}
+					}
+				},
+				{
+					data : 'companyId'
+				},
+				{
+					data : 'version'
+				},
+				{
+					data : 'url'
+				},
+				{
+					data : 'description'
+				},
+				{
+					data : function(row) {
+						var date = new Date(row.createTime);
+						return date.format("yyyy-MM-dd hh:mm:ss");
+					}
+				},
+				{
+					data : function(row) {
+						return "<a onclick='toUpdateFile("+ row.id+ ")' class='btn btn-success btn-xs'>修改</a>&nbsp;&nbsp;"
+								+ "<a data-toggle='modal' onclick='javascript:softwareId="+row.id+";' href='#deleteModal' class='btn btn-danger btn-xs'>删除</a>";
+					}
+				} ];
+		table = initTable("software_table", "getsoftwarelist", columns);
+
+		var rules={
+				alias :  'required',
+				type : "required",
+				companyId : 'required',
+				version : 'required',
+				tps : 'required',
+				description : 'required'				
+			};
+		var messages={
+				alias :  '请输入软件别名',
+				type : "请选择软件类型",
+				companyId : '请输入厂商',
+				version : '请输入版本号',
+				tps : '请输入第三方链接',
+				description : '请输入版本更新描述'
+			};
+		
+		validator = validatorUtils("newForm", rules, messages);
+		
+		
+		$("#selectAll").on('click', function() {
+			var that = this;
+			$("input[name='checkbox']").each(function() {
+				var v = $(that)[0].checked;
+				$(this)[0].checked = v;
+			});
+		});
+
+		$('#search').click(function() {
+			var param = $('#searchForm').serialize();
+			table.ajax.url("getsoftwarelist?"+param).load();
+		});
+
+		$('#newSubmit').click(function() {
+			var software = $('#software').val();
+			var source = $('input[name="source"]:checked').val();
+			if($('#newForm').valid()){
+				if(source==0){
+					if(software==null||software==""){					
+						$('#errorMsg').show();
+						return false;
+					}else{
+						$('#errorMsg').hide();
+					}
+				}
+				$('#newForm').submit();
+			}
+		});
+
+		$('#del').click(function() {
+			AjaxUtils("removesoftware", "get", "id="+softwareId, function(data){
+				if(data=='ok'){
+					$('#deleteModal').modal('hide');
+					table.ajax.reload();
+				}
+			});
+	    });
+		
+		//添加模态框隐藏后触发改事件
+		$('#newModal').on('hide.bs.modal',function(){
+			$('#newForm').get(0).reset();
+			$('#software').fileinput('refresh');
+			validator.resetForm();
+			//清除错误信息残留样式
+			$('#newModal .form-group').removeClass(
+					"has-error has-success has-feedback");
+			$('#newModal .form-group').find("span").removeClass(
+					"glyphicon-ok glyphicon-remove");
+		});
+	});
+
+	function toUpdateFile(id) {
+		AjaxUtils("toupdate", "get", "id="+id, function(data){
+			loadData(data);
+			$('#newModal').modal('show');
+		});
+	}
+	
+	function submitSuccess(obj){
+		$('#newForm').get(0).reset();
+		$('#software').fileinput('refresh');
+		$('#newModal').modal('hide');
+		table.ajax.reload();
+	}
+</script>

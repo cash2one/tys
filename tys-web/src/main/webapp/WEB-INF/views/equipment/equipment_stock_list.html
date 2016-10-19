@@ -1,0 +1,623 @@
+<section class="content-header">
+	<h1>
+		设备管理 <small></small>
+	</h1>
+	<ol class="breadcrumb">
+		<li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+		<li class="active">库存信息</li>
+	</ol>
+</section>
+
+<section class="content">
+	<div class="row">
+		<div class="col-md-12">
+			<div class="box box-info">
+				<div class="box-header with-border">
+					<h3 class="box-title">设备库存信息管理</h3>
+				</div>
+				<div class="box-body">
+					<form id="searchForm" role="form">
+						<div class="row">
+							<div class="col-md-3">
+								<div class="form-group">
+									<label>设备Imei:</label>
+									<input type="text" name="imeiNo" class="form-control"  placeholder="请输入设备imei">
+								</div>
+							</div>
+						</div>
+					</form>
+				</div>
+				<div class="box-footer">
+					<div class="row">
+						<@excel.import configFile="学生卡导入.xlsx" serviceBean="equipmentService" buttonCode="批量入库" id="search"/>
+						<@excel.import configFile="批量分配经销商.xlsx" serviceBean="assignDealerService" buttonCode="批量分配经销商" id="search" url="assignAgent"/>
+						<@excel.import configFile="批量分配学校.xlsx" serviceBean="assignSchoolService" buttonCode="批量分配学校" id="search" url="assignSchool"/>
+						<div class="col-sm-2">
+							<a id="search" class="btn btn-block btn-social btn-success">
+								<i class="fa fa-plus"></i> 查询
+							</a>
+						</div>
+						</br>
+						</br>
+						<@excel.import configFile="批量删除.xlsx" serviceBean="delEquipmentService" buttonCode="批量删除" id="search"/>
+						<@excel.import configFile="批量返还.xlsx" serviceBean="returnEquipmentService" buttonCode="批量返还" id="search"/>
+						<!-- 
+						</br>
+						</br>
+						<div class="col-sm-2">
+							<a class="btn btn-block btn-social btn-success" data-toggle="modal" href="#myModal" onclick="initvalue();">
+								<i class="fa fa-plus"></i> 设备入库
+							</a>
+						</div>
+						<div class="col-sm-2">
+							<a class="btn btn-block btn-social btn-success" data-toggle="modal" href="#myModal1" onclick="initvalue();">
+								<i class="fa fa-plus"></i> 分配经销商
+							</a>
+						</div>
+						<div class="col-sm-2">
+							<a class="btn btn-block btn-social btn-success" data-toggle="modal" href="#myModal" onclick="initvalue();">
+								<i class="fa fa-plus"></i> 分配学校
+							</a>
+						</div> -->
+						<div class="col-sm-8" style="display:none;" id="notice-tip">
+							<div class="alert alert-info">
+								<button type="button" class="close" data-dismiss="alert">
+									<i class="icon-remove"></i>
+								</button>
+								<i class="icon-ok"></i><strong id="notice-span"></strong>
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-sm-12" style="padding: 20px;">
+							<table id="equipment_table" class="table table-bordered table-hover table-striped">
+								<thead>
+									<tr>
+										<th class="center" width="3%">
+											<label>
+												<input type="checkbox" class="ace" id="selectAll"/>
+												<span class="lbl"></span>
+											</label>
+										</th>
+										<th width="10%">imei号</th>
+										<th width="18%">设备类型</th>
+										<th width="18%">入库时间</th>
+										<th width="18%">设备状态</th>
+										<th width="18%">操作</th>
+									</tr>
+								</thead>
+							</table>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+<!-- Modal -->
+	<div id="myModal" class="modal fade" tabindex="-1" role="dialog"
+		aria-labelledby="myModalLabel" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal">
+						<span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
+					</button>
+					<h4 class="modal-title" id="myModalLabel">设备入库</h4>
+				</div>
+				<div class="modal-body">
+					<form id="add-form" class="form-horizontal add-form" role="form" method="post" action="">
+						<table class="table">
+							<tbody>
+								<tr>
+									<td align="right"><label>IMEI：</label></td>
+									<td>
+										<input type="text" name="imei" id="imei" maxlength="15"/>
+									</td>
+								</tr>
+								<tr>
+									<td align="right"><label>设备类型：</label></td>
+									<td>
+										<select name="type">
+											<option value=0>学生卡</option>
+										</select>
+									</td>
+								</tr>
+							</tbody>
+						</table>
+					</form>
+				</div>
+				<div class="modal-footer">
+					<button type="button" id="addEquipment" class="btn btn-small btn-primary">提交</button>
+					<button type="button" id="cancel" class="btn btn-small btn-danger" data-dismiss="modal">取消</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- 分配经销商 -->
+	<div id="myModal1" class="modal fade" tabindex="-1" role="dialog"
+		aria-labelledby="myModalLabel1" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal">
+						<span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
+					</button>
+					<h4 class="modal-title" id="myModalLabel1">分配经销商</h4>
+				</div>
+				<div class="modal-body">
+					<form id="assign-form" class="form-horizontal add-form" role="form" method="post" action="">
+						<input type="hidden" name = "id" id="equipmentId"/>
+						<table class="table">
+							<tbody>
+								<tr>
+									<td align="right"><label>经销商电话：</label></td>
+									<td><input type="text" maxlength=20 id="agentPhone" name="agentPhone" /></td>
+								</tr>
+								<!-- 
+								<tr>
+									<td align="right"><label>省份：</label></td>
+									<td>--><!-- <select name="provinceId" id="common_province"></select> -->
+										<!-- <select id="common_province" name="provinceId"
+											data-placeholder="请选择省份" class="form-control select2">
+										</select>
+									</td>
+								</tr>
+								<tr>
+									<td align="right"><label>城市：</label></td>
+									<td>
+										<!-- <select name="cityId" id="common_city"></select> 
+										<select id="common_city" name="cityId"
+											data-placeholder="请选择城市" class="form-control select2">
+										</select>
+									</td>
+								</tr>
+								<tr>
+									<td align="right"><label>区县：</label></td>
+									<td>
+										<!-- <select name="areaId" id="common_area"></select> 
+										<select id="common_area" name="areaId"
+											data-placeholder="请选择区县" class="form-control select2">
+										</select>
+									</td>
+								</tr>
+								<tr id="trDealerId">
+									<td align="right">
+									<label>经销商：</label></td>
+									<td>
+										<select name="dealerId" id="dealerId"
+											 data-placeholder="请选择经销商" class="form-control select2">
+										</select>
+									</td>
+								</tr> 
+<!-- 								<tr id="trSchoolId" style="display:none">
+									<td align="right"><label>学校：</label></td>
+									<td>
+										<select name="schoolId" id="schoolId"></select>
+									</td>
+								</tr> -->
+							</tbody>
+						</table>
+					</form>
+				</div>
+				<div class="modal-footer">
+					<button type="button" id="assignEquipment" class="btn btn-small btn-primary">提交</button>
+					<button type="button" id="cancel" class="btn btn-small btn-danger" data-dismiss="modal">取消</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+	
+	<!-- 分配经销商 -->
+	<div id="myModal2" class="modal fade" tabindex="-1" role="dialog"
+		aria-labelledby="myModalLabel2" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal">
+						<span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
+					</button>
+					<h4 class="modal-title" id="myModalLabel1">分配学校</h4>
+				</div>
+				<div class="modal-body">
+					<form id="assign-form" class="form-horizontal add-form" role="form" method="post" action="">
+						<input type="hidden" name = "id" id="equipmentId1"/>
+						<table class="table">
+							<tbody>
+								<tr>
+									<td align="right"><label>学校名称：</label></td>
+									<td><input type="text" maxlength=20 id="schoolName" name="schoolName" /></td>
+								</tr>
+							</tbody>
+						</table>
+					</form>
+				</div>
+				<div class="modal-footer">
+					<button type="button" id="assignSchool" class="btn btn-small btn-primary">提交</button>
+					<button type="button" id="cancel" class="btn btn-small btn-danger" data-dismiss="modal">取消</button>
+				</div>
+			</div>
+		</div>
+	</div>
+<!--  -->
+</section>
+
+<script type="text/javascript">
+var table;
+initAddrElement();
+var rowHash={};
+$(function() {
+	
+	
+	//initSearchSelect2();
+	
+	table = initDataTable('equipmentStock/list');
+
+	$("#search").click(function() {
+		var param = $("#searchForm").serialize();
+		var url = 'equipmentStock/list?'+param;
+		table.ajax.url(url).load();
+		//table.fnDestroy();
+		//table = initDataTable(url);
+	});
+	
+	// imei号验证
+	  jQuery.validator.addMethod("isImei", function(value, element) {
+	    var length = value.length;
+	    var reg =  new RegExp('^[1-9]\\d*$');
+	    return this.optional(element) || (length == 15 && reg.test(value));
+	  }, "imei号只能是15位的数字!");
+	
+	/**/
+	$('#addEquipment').on('click', function() {
+		
+		$("#add-form").validate({
+			errorElement : 'span',
+		    errorClass : 'help-block',
+		    rules : {
+		    	imei : {
+		    		required : true,
+			        isImei : true	
+		    	}
+		    },
+		    messages : {
+		    	imei : {
+			        required : "imei号不能为空!"
+		      	}
+		    },
+		    highlight : function(element) {
+		      $(element).addClass('has-error has-feedback');
+		    },
+		});
+		
+		var flag = $("#add-form").valid();
+		if(!flag){
+			return;
+		}
+		
+		
+		
+		var url ="${base}/sys/equipment/add";
+		var param = $('#add-form').serialize();
+		AjaxUtils(url,'POST',param,function(data){
+			if(data){
+				$("#myModal").modal('hide');
+	    		if(data.data.result=='success'){
+		    		$("#myModal").modal('hide');
+	    		}
+	    		alert(data.data.notice);
+	    		loadPage('equipmentStock');
+	    		
+     		}else{
+     			alert('操作失败！');
+     			$("#myModal").modal('hide');
+     		}
+		});
+	});
+	
+	
+	$('#assignEquipment').on('click', function() {
+		var agentPhone = $("#agentPhone").val();
+		if(agentPhone == ''){
+			alert("经销商电话不能为空!");
+			return ;
+		}
+		var queryUrl ="${base}/sys/checkAgent";
+		AjaxUtils(queryUrl,'GET',{"agentPhone":agentPhone},function(data){
+			if(data !='success'){
+				alert(data);
+			}else{
+				var param = {"dealerName":agentPhone,"id":$("#equipmentId").val()};
+				AjaxUtils("${base}/sys/equipment/assignDealer",'POST',param,function(data){
+					if(data){
+						$("#myModal1").modal('hide');
+			    		if(data.data.result=='success'){
+				    		$("#myModal1").modal('hide');
+			    		}
+			    		alert(data.data.notice);
+			    		loadPage('equipmentStock');
+		     		}else{
+		     			alert('操作失败！');
+		     			$("#myModal1").modal('hide');
+		     		}
+				});
+			}
+		});
+	});
+	
+	$('#assignSchool').on('click', function() {
+		var schoolName = $("#schoolName").val();
+		if(schoolName == ''){
+			alert("学校名称不能为空!");
+			return ;
+		}
+		var queryUrl ="${base}/sys/checkSchool";
+		var params = {"schoolName":schoolName};
+		AjaxUtils(queryUrl,'GET',params,function(data){
+			if(data !='success'){
+				alert(data);
+			}else{
+				var param = {"schoolName":schoolName,"id":$("#equipmentId1").val()};
+				AjaxUtils("${base}/sys/equipment/assignSchool",'POST',param,function(data){
+					if(data){
+						$("#myModal2").modal('hide');
+			    		if(data.data.result=='success'){
+				    		$("#myModal2").modal('hide');
+			    		}
+			    		alert(data.data.notice);
+			    		loadPage('equipmentStock');
+		     		}else{
+		     			alert('操作失败！');
+		     			$("#myModal2").modal('hide');
+		     		}
+				});
+			}
+		});
+	});
+	
+	/*
+	$("#common_area").on('change', function() {
+		//var operType = $("#operType").val();
+		var areaCode = $(this).val();
+		var url = "dealerList";
+		//if(operType == 1){
+		//	var url = "dealerList";
+		//}else if(operType == 2){
+		//	var url = "schoolList";
+		//}
+		
+		if(url == "" || !areaCode){
+			return
+		}
+		var param = "areaCode=" + areaCode;
+		AjaxUtils(url, 'GET', param, function(data) {
+			if (data) {
+				///if(operType == 1){
+					$("#dealerId").get(0).options.length=0;
+		    		for(var i = 0; i < data.length; i++){
+		    			$("#dealerId").get(0).options.add(new Option(data[i].name,data[i].id));
+					};
+				//}else if(operType == 2){
+				//	$("#schoolId").get(0).options.length=0;
+		    		//for(var i = 0; i < data.length; i++){
+		    		//	$("#schoolId").get(0).options.add(new Option(data[i].name,data[i].id));
+					//};
+				//}
+			}
+		}); 
+	});
+	*/
+	
+	$("#searchBtn").on('click',function(){
+		/*$('#school_table').dataTable().fnClearTable();   //将数据清除  
+		AjaxUtils(url,'GET',param,function(data){
+			$('#school_table').dataTable().fnAddData(packagingdatatabledata(msgObj),true);  //数据必须是json对象或json对象数组
+		});*/
+	});
+});
+
+function initvalue(){
+	$("input[name='editid']").val(0);
+	$('#add-form')[0].reset();
+}
+
+function setvalue(id){
+	initvalue();
+	var proIdArray = ["provinceId","cityId","areaId"];
+	var proNameArray = ["name","adminId","adminName","address","tel","messageFlag"];
+	$("input[name='editid']").val(id);
+	var currentRow = rowHash[id];
+
+	for(var i=0;i<proIdArray.length;i++){
+		$("#"+proIdArray[i]).val(currentRow[proIdArray[i]]);
+		if(proIdArray[i]=="provinceId"){
+			$("#provinceId").trigger('change');
+		}
+		if(proIdArray[i]=="cityId"){
+			$("#cityId").trigger('change');
+		}
+	}
+	for(var i=0;i<proNameArray.length;i++){
+		$("input[name='"+proNameArray[i]+"']").val(currentRow[proNameArray[i]]);
+	}
+}
+
+function setvalue2(id,type){
+	$("#equipmentId1").val(id);
+}
+
+
+function setvalue1(id,type){
+	$("#equipmentId").val(id);
+	//$("#operType").val(type);
+	$("#assign-form").validate({
+		errorElement : 'span',
+	    errorClass : 'help-block',
+	    highlight : function(element) {
+	      $(element).addClass('has-error has-feedback');
+	    },
+	});
+	
+	if(type == 1){
+		//$("#schoolId").rules("remove");
+		$("#dealerId").rules("add",{required:true,messages:{required: "经销商不能为空!"}});
+		//$("#trDealerId").show();
+		//$("#trSchoolId").hide();
+		$("#myModalLabel1").html("分配经销商");
+	}else if(type == 2){
+		$("#schoolId").rules("add",{required:true,messages:{required: "学校不能为空！"}});
+		$("#dealerId").rules("remove");
+		$("#trDealerId").hide();
+		$("#trSchoolId").show();
+		$("#myModalLabel1").html("分配学校");
+	}
+}
+
+function del(id){
+	if(window.confirm('确认删除该设备？')==true){
+		var url='${base}/sys/equipment/del';
+		var param = {"id":id};
+		AjaxUtils(url,'POST',param,function(data){
+			if(data){
+				if(data =="200"){
+					alert("删除成功!");
+				}else if(data =="1"){
+					alert("设备不存在!");
+				}else if(data =="2"){
+					alert("只有入库状态的设备才能删除!");
+				}else if(data =="999"){
+					alert("系统异常,请联系管理员!");
+				}
+				loadPage('equipmentStock');
+     		}else{
+     			alert('操作失败！');
+     		}
+		});
+	}
+}
+
+
+function rtn(id){
+	if(window.confirm('确认返还该设备？')==true){
+		var url='${base}/sys/equipment/rtn';
+		var param = {"id":id};
+		AjaxUtils(url,'POST',param,function(data){
+			if(data){
+				if(data =="200"){
+					alert("返还成功!");
+				}else if(data =="1"){
+					alert("设备不存在!");
+				}else if(data =="2"){
+					alert("已售设备或者入库状态的设备不能返还!");
+				}else if(data =="3"){
+					alert("学校不存在,无法返还!");
+				}else if(data =="4"){
+					alert("无权限操作该数据!");
+				}else if(data =="5"){
+					alert("无上级经销商!");
+				}else if(data =="6"){
+					alert("上级经销商不存在!");
+				}else if(data =="999"){
+					alert("系统异常,请联系管理员!");
+				}
+				loadPage('equipmentStock');
+     		}else{
+     			alert('操作失败！');
+     		}
+		});
+	}
+}
+
+function initDataTable(url){
+	var id = "equipment_table";
+	var columns = [{//多选框
+		data: "id"
+	}, {//名称
+		data: "imei",
+		defaultContent : ''
+	},{//名称
+		data: function(row, type, set){
+			if(row.type == 0){
+				return "学生卡";
+			}
+			return "";
+		},
+		defaultContent : ''
+	},{//名称
+		data: function(row, type, set){
+			var val = row.createTime;
+			if(!val){
+				return "";
+			}else{
+				var d = new Date(val);
+				return d.format("yyyy-MM-dd hh:mm:ss");
+			}
+			return "";
+		},
+		defaultContent : ''
+	},{//名称
+		data: function(row, type, set){
+			if(row.state == 0){
+				return "设备入库";
+			}else if(row.state == 1){
+				return "已分配经销商";
+			}else if(row.state == 2){
+				return "已分配学校";
+			}
+			return "";
+		},
+		defaultContent : ''
+	},{//操作
+		data: function (row, type, set) {
+			rowHash[row.id] = row;
+			if(row.state == 0){
+				return '<input type="button" data-toggle="modal" href="#myModal1" onclick="setvalue1(' + row.id + ',1)" class="btn btn-success btn-sm" value="分配经销商" />'+
+				'&nbsp;<input type="button" data-toggle="modal" onclick="del(' + row.id + ')" class="btn btn-success btn-sm" value="删除" />';
+			}
+			if(row.state == 1){
+				return '<input type="button" data-toggle="modal" onclick="setvalue2(' + row.id + ',2)" class="btn btn-success btn-sm" value="分配学校" />'+
+				'&nbsp;<input type="button" data-toggle="modal" onclick="rtn(' + row.id + ')" class="btn btn-success btn-sm" value="返还设备" />';
+			}
+			
+			if(row.state == 2){
+				return '<input type="button" data-toggle="modal" onclick="rtn(' + row.id + ')" class="btn btn-success btn-sm" value="返还设备" />';
+			}
+			return "";
+        }
+	}];
+	
+	return initTable(id,url,columns)
+}
+
+/*
+
+function initSearchSelect2() {
+	initSelect2("common_province", false, "getaddress?type=0");
+	$('#common_city').select2();
+	$('#common_area').select2();
+
+	
+	$('#common_province').change(function() {
+		$("#common_city").val(null).trigger("change");
+		$("#common_area").val(null).trigger("change");
+		var province = $('#common_province').val();
+		initSelect2("common_city", false, "getaddress?type=1&code="+ province);
+	}); 
+
+	
+	$('#common_city').change(function() {
+		$("#common_area").val(null).trigger("change");
+		var city = $('#common_city').val();
+		initSelect2("common_area", false, "getaddress?type=2&code=" + city);
+	});
+}
+
+*/
+
+
+
+
+
+
+</script>

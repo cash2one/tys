@@ -1,0 +1,101 @@
+<#macro import configFile serviceBean datagridId="none" buttonCode="" title="" url=""
+id="excelImport" value="导入"> <#if datagridId=="none">
+<!-- <button class="btn btn-xs btn-danger" onclick="${id}ToImport()">
+	<i class="icon-cloud-upload bigger-110"></i>${value}
+</button> -->
+<!--  
+	href="${base}/sys/excel/toImport?configFile=${configFile}&serviceBeans=${serviceBean}&id=${id}" title="${buttonCode}"
+-->
+	<div class="col-sm-2" style="width:200px">
+		<a class="btn btn-block btn-social btn-success"  onclick="toImport('${configFile}','${serviceBean}','${id}','${url}')" title="${buttonCode}">
+			<i class="fa fa-plus"></i> ${buttonCode}
+		</a>
+	</div>
+</#if>
+
+<script>
+	function toImport(configFile,serviceBean,id,url){
+		var url = "${base}/sys/excel/toImport?configFile="+configFile+"&serviceBeans="+serviceBean+"&id="+id+"&exportActionUrl="+url;
+		window.open(url);
+	}
+	
+
+		function ${id}ToImport()
+		{
+			
+			
+			/*
+			layer.open({
+				type : 2,
+				title : '${value}',
+				shadeClose : true,
+				shade : 0.8,
+				area : [ '600px', '450px' ],
+				content : '${base}/framework/excel/toImport?configFile=${configFile}&serviceBeans=${serviceBean}&id=${id}'
+			}); */
+		}
+		
+		function ${id}ImportSuccess()
+		{
+			if("${datagridId}"!="none")
+			{
+				$("#${datagridId}").jqGrid('setGridParam', {
+		            page: 1
+		        }).trigger("reloadGrid");
+			}
+		}
+		
+		$(function(){
+			if("${datagridId}"!="none")
+			{	
+				$("#pg_${datagridId}_toppager dl").append("<dd style=\"display:inline-block;margin-right:2px;\"><button class=\"btn btn-xs btn-danger\" onclick=\"${id}ToImport()\"><i class=\"icon-cloud-upload bigger-110\"></i>${value}</button></dd>");
+			}
+		});
+	</script>
+
+</#macro> 
+<#macro export configFile datagridId actionUrl buttonCode="none" isPagination="true" id="excelExport" value="导出">
+<span id="${excelExportBtn}Span" style="display: none"></span>
+<script>
+	function ${id}()
+	{
+		var totalCount = $('#${datagridId}').jqGrid('getGridParam','records');
+
+		if(totalCount==0)
+		{
+			layer.msg("没有数据导出");
+			return;
+		}
+		
+		var url;
+		if("${actionUrl}".indexOf("?")>-1)
+		{
+			url="${actionUrl}&configFile=${configFile}&"+$("#${excelExportBtn}Span").parents("form").formSerialize();
+		}
+		else
+		{
+			url="${actionUrl}?configFile=${configFile}&"+$("#${excelExportBtn}Span").parents("form").formSerialize();
+		}
+		
+		if(${isPagination} && totalCount>${excelExportPaginationSize})
+		{
+			layer.open({
+				type : 2,
+				title : '分页${value} - 每页${excelExportPaginationSize}行',
+				shadeClose : true,
+				shade : 0.8,
+				area : [ '600px', '450px' ],
+				content : "${base}/framework/excel/toExportPagination?exportTotalCount="+totalCount+"&exportPaginationSize=${excelExportPaginationSize}&exportActionUrl="+encodeURIComponent(url)
+			});
+		}
+		else
+		{
+			location.href=url+"&page=1&rows=999999999";
+		}
+	}
+	
+	$(function(){
+		$("#pg_${datagridId}_toppager dl").append("<dd style=\"display:inline-block;margin-right:2px;\"><button class=\"btn btn-xs btn-danger\" onclick=\"${id}()\"><i class=\"icon-cloud-download bigger-110\"></i>${value}</button></dd>");
+	});
+</script>
+</#macro>

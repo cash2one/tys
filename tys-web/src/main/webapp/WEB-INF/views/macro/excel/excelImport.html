@@ -1,0 +1,170 @@
+<@html.html> <@html.head/> 
+<body class="hold-transition skin-blue sidebar-mini">
+	<div class="wrapper">
+		<#include "../../../layout/navbar.html"/>
+		<div id="main_content" class="content-wrapper">
+		<script src="${base}/resources/plugins/jQuery/jQuery-2.1.4.min.js"></script>
+<!-- 		<section class="content-header">
+	<h1>
+		设备管理 <small></small>
+	</h1>
+	<ol class="breadcrumb">
+		<li><a href="${base}"><i class="fa fa-dashboard"></i> Home</a></li>
+		<li class="active">库存信息</li>
+	</ol>
+</section> -->
+<form id="importForm" action="${base}/sys/excel/import"
+	style="margin: 10px" method="POST" enctype="multipart/form-data">
+	<table>
+		<#if (importExportDTO.exportActionUrl)?? && importExportDTO.exportActionUrl =='assignAgent'>
+			<tr style="height:50px">
+				<td>&nbsp;</td>
+			</tr>
+			<tr>
+				<td align="right">经销商电话：</td>
+				<td><input type="text" maxlength=20 id="agentPhone" name="agentPhone" /></td>
+			</tr>
+			<tr style="height:10px">
+				<td>&nbsp;</td>
+			</tr>
+		</#if>
+		<#if (importExportDTO.exportActionUrl)?? && importExportDTO.exportActionUrl =='assignSchool'>
+			<tr style="height:50px">
+				<td>&nbsp;</td>
+			</tr>
+			<tr>
+				<td align="right">学校名称：</td>
+				<td><input type="text" id="schoolName" name="schoolName" /></td>
+			</tr>
+			<tr style="height:10px">
+				<td>&nbsp;</td>
+			</tr>
+		</#if>
+		<tr>
+			<td align="right">Excel文件：</td>
+			<td><input type="file" id="importFile" name="importFile"
+				style="border: 0px; width: 300px"
+				accept="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel" />
+			</td>
+		</tr>
+		<tr height="20">
+			<td>
+				<button class="btn btn-xs btn-danger" onclick="return save()">
+					<i class="icon-cloud-upload bigger-110"></i>导入
+				</button>
+			</td>
+			<td><a
+				href="${base}/sys/excel/downTemplate?configFile=${importExportDTO.configFile}&serviceBeans=${importExportDTO.serviceBeans}"
+				style="text-decoration: underline">Excel模板下载 </a></td>
+		</tr>
+		<#if errorMsg??>
+		<tr>
+			<td style="color: #FF0000" colspan="2">错误：${errorMsg}</td>
+		</tr>
+		</#if>
+
+		<tr>
+			<td id="importRemark" colspan="2"></td>
+		</tr>
+	</table>
+	<input type="hidden" name="serviceBeans" value="${importExportDTO.serviceBeans}" /> 
+	<input type="hidden" name="configFile" value="${importExportDTO.configFile}" /> 
+	<input type="hidden" name="id" value="${importExportDTO.id}" />
+	<input type="hidden" id="queryId" value="${(importExportDTO.id)!''}" />
+	<input type="hidden" name ="exportActionUrl" id="url" value="${(importExportDTO.exportActionUrl)!''}" />
+</form>
+
+<script>
+	var importSuccess = "${importSuccess!''}";
+	var queryId = $("#queryId").val();
+	if(importSuccess == 1){
+		window.opener.document.getElementById(queryId).click();
+		window.close();
+	}
+
+
+	$(function() {
+		//if(parent.document.getElementById("${importExportDTO.id}ImportRemark"))
+		//{
+		//	document.getElementById("importRemark").innerHTML = parent.document.getElementById("${importExportDTO.id}ImportRemark").innerHTML;
+		//}
+	});
+
+	function save() {
+		var file = document.getElementById("importFile").value;
+		if (file.length>0) {
+			var fileExt=(/[.]/.exec(file)) ? /[^.]+$/.exec(file.toLowerCase()) : '';
+			if(fileExt !='xlsx' && fileExt !='xls' ){
+				alert("请选择Excel文件!");
+				return false;
+			}
+			
+			var url = $("#url").val();
+			if(url == 'assignAgent'){
+				var agentPhone = $("#agentPhone").val();
+				if(agentPhone == ''){
+					alert("经销商电话不能为空!");
+					return false;
+				}
+				var queryUrl ="${base}/sys/checkAgent";
+				AjaxUtils(queryUrl,'GET',{"agentPhone":agentPhone},function(data){
+					if(data !='success'){
+						alert(data);
+						return false;
+					}else{
+						$("#importForm").submit();
+						return true;
+					}
+				});
+				return false;
+			}else if(url == 'assignSchool'){
+				var schoolName = $("#schoolName").val();
+				if(schoolName == ''){
+					alert("学校名称不能为空!");
+					return false;
+				}
+				var queryUrl ="${base}/sys/checkSchool";
+				var params = {"schoolName":schoolName};
+				AjaxUtils(queryUrl,'GET',params,function(data){
+					if(data !='success'){
+						alert(data);
+						return false;
+					}else{
+						$("#importForm").submit();
+						return true;
+					}
+				});
+				return false;
+			}else{
+				$("#importForm").submit();
+	    		return true;
+			}
+		} else {
+			alert('请选择Excel文件!');
+			return false;
+		} 
+	}
+
+	/**
+	<#if importSuccess??>
+		try{
+			parent.importSuccess("${importExportDTO.id}");
+		}
+		catch(e)
+		{
+			parent.${importExportDTO.id}ImportSuccess();
+		}
+		
+		parent.layer.msg('Excel导入成功');
+		
+		parent.layer.close(parent.layer.getFrameIndex(window.name));
+	</#if>
+	*/
+</script>
+		
+		
+		</div>
+		<#include "../../../layout/footer.html"/>
+	</div>
+</body>
+</@html.html>

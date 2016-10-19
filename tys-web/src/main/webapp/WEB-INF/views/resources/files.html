@@ -1,0 +1,226 @@
+<!-- 以下内容将在导航条上通过jquery动态加载，实现局部刷新 -->
+<section class="content-header">
+	<h1>文件管理</h1>
+	<ol class="breadcrumb">
+		<li><a href="#"><i class="fa fa-home"></i> 首页</a></li>
+		<li class="active">资源管理</li>
+		<li class="active">文件管理</li>
+	</ol>
+</section>
+
+<section class="content">
+	<div class="row">
+		<div class="col-md-12">
+			<div class="box box-info">
+				<div class="box-header with-border">
+					<h3 class="box-title">文件列表</h3>
+				</div>
+				<div class="box-body">
+					<form id="searchForm" role="form">
+						<div class="row">
+							<div class="col-md-2">
+								<div class="form-group">
+									<label for="">文件名称</label> <input type="text" name="name"
+										class="form-control" placeholder="请输入文件名称">
+								</div>
+							</div>
+
+							<div class="col-md-2">
+								<div class="form-group">
+									<label for="">文件类型</label> <select name="type"
+										class="form-control">
+										<option value="-1" selected="selected">请选择文件类型</option>
+										<option value="1">图片</option>
+										<option value="2">视频</option>
+										<option value="3">音频</option>
+										<option value="4">文档</option>
+										<option value="5">安装包</option>
+									</select>
+								</div>
+							</div>
+
+							<div class="col-md-1">
+								<div class="form-group">
+									<label>&nbsp;&nbsp;</label> <a id="search"
+										class="btn btn-block btn-social btn-info"> <i
+										class="fa fa-search"></i> 查询</a>
+								</div>
+							</div>
+						</div>
+					</form>
+				</div>
+
+				<div class="box-footer">
+					<div class="row">
+						<div class="col-sm-2">
+							<a data-toggle='modal' href="#newModal"
+								class="btn btn-block btn-social btn-success"> <i
+								class="fa fa-upload"></i> 上传
+							</a>
+						</div>
+					</div>
+
+					<div class="row">
+						<div class="col-sm-12" style="padding: 20px;">
+							<table id="file_table" width="100%"
+								class="table table-bordered table-hover table-striped">
+								<thead>
+									<tr>
+										<th class="center" width="5%"><label> <input
+												type="checkbox" class="ace" id="selectAll" /> <span
+												class="lbl"></span>
+										</label></th>
+										<th>文件名</th>
+										<th>文件路径</th>
+										<th>下载地址</th>
+										<th>文件类型</th>
+										<th>上传时间</th>
+										<th>操作</th>
+									</tr>
+								</thead>
+							</table>
+						</div>
+					</div>
+
+					<div class="container">
+						<div id="newModal" class="modal" aria-hidden="true">
+							<div class="modal-dialog" style="width: 45%">
+								<div class="modal-content">
+									<div class="modal-header">
+										<a class="close" data-dismiss="modal">×</a>
+										<h4 id="title">上传文件</h4>
+									</div>
+									<div class="modal-body">
+										<div class="row">
+											<input id="file-Portrait" class="file file-loading" multiple
+												name="upload" type="file">
+										</div>
+									</div>
+									<div class="modal-footer">
+										<a href="#" id="newSubmit" class="btn btn-success">提交</a> <a
+											href="#" class="btn btn-default" data-dismiss="modal">取消</a>
+									</div>
+								</div>
+							</div>
+						</div>
+
+						<div id="deleteModal" class="modal modal-warning"
+							aria-hidden="true">
+							<div class="modal-dialog">
+								<div class="modal-content">
+									<div class="modal-header">
+										<a class="close" data-dismiss="modal">×</a>
+										<h4>警告</h4>
+									</div>
+									<div class="modal-body">
+										<p>你确定要删除这条信息吗？</p>
+									</div>
+									<div class="modal-footer">
+										<a id="del" href="#" class="btn btn-danger">确认</a> <a href="#"
+											class="btn btn-default" data-dismiss="modal">取消</a>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</section>
+
+<script>
+	var table, fileId;
+	var oFileInput = new FileInput();
+	$(function() {
+		oFileInput.Init("file-Portrait", "mergefile");
+		
+		var columns = [
+				{
+					data : 'id'
+				},
+				{
+					data : 'name'
+				},
+				{
+					data : 'path'
+				},
+				{
+					data : 'url'
+				},
+				{
+					data : function(row) {
+						var str = "";
+						switch (row.type) {
+						case 0:
+							str = "未知";
+							break;
+						case 1:
+							str = "图片";
+							break;
+						case 2:
+							str = "视频";
+							break;
+						case 3:
+							str = "音频";
+							break;
+						case 4:
+							str = "文档";
+							break;
+						case 5:
+							str = "安装包";
+							break;
+						default:
+							str = "";
+						}
+						return str;
+					}
+				},
+				{
+					data : function(row) {
+						var date = new Date(row.createTime);
+						return date.format("yyyy-MM-dd hh:mm:ss");
+					}
+				},
+				{
+					data : function(row) {
+						return "<a data-toggle='modal' href='#newModal' onclick='toUpdateFile("+row.id+")' class='btn btn-success btn-xs'>修改</a>&nbsp;&nbsp;"
+								+ "<a data-toggle='modal' onclick='javascript:fileId="+row.id+";' href='#deleteModal' class='btn btn-danger btn-xs'>删除</a>";
+					}
+				} ];
+		table = initTable("file_table", "getfilelist", columns);
+		
+		$("#selectAll").on('click',function(){
+			var that = this;
+			$("input[name='checkbox']").each(function(){
+				var v = $(that)[0].checked;
+				$(this)[0].checked=v;
+			});
+		});
+
+		$('#search').click(function(){
+			var param = $('#searchForm').serialize();
+			table.ajax.url("getfilelist?"+param).load();
+		});
+
+		$('#newSubmit').click(function() {
+			$('#file-Portrait').fileinput('upload');
+		});
+
+		$('#del').click(function() {
+			$('#del').click(function() {
+				AjaxUtils("removefile", "get", "id="+fileId, function(data){
+					if(data=='ok'){
+						$('#deleteModal').modal('hide');
+						table.ajax.reload();
+					}
+				});
+		    });
+		});
+	});
+	
+	function toUpdateFile(id){
+		$('#file-Portrait').fileinput('destroy');
+		oFileInput.Init("file-Portrait", "mergefile?id="+id);
+	}
+</script>

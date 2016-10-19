@@ -1,0 +1,48 @@
+<beans:beans xmlns="http://www.springframework.org/schema/security"
+	xmlns:beans="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+           http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+           http://www.springframework.org/schema/security
+           http://www.springframework.org/schema/security/spring-security.xsd">
+
+
+	<!-- APP登录 -->
+	<http pattern="/spi/app/s/**" use-expressions="false"
+		authentication-manager-ref="user-auth-manager">
+		<intercept-url pattern="/spi/app/s/**" access="ROLE_PARENT,ROLE_TEACHER" />
+		<form-login login-processing-url="/spi/app/s/userLogin"
+			login-page="/spi/app/n/noAuth" username-parameter="acct"
+			password-parameter="pw" authentication-success-handler-ref="userLoginHandler"
+			authentication-failure-handler-ref="userLoginHandler" />
+		<logout logout-url="/spi/app/s/userLogout" success-handler-ref="userLoginHandler"
+			invalidate-session="true" />
+
+		<session-management
+			session-authentication-error-url="/spi/app/n/noAuth?err=1"
+			invalid-session-url="/spi/app/n/noAuth">
+			<concurrency-control max-sessions="1"
+				error-if-maximum-exceeded="false" expired-url="/spi/app/n/noAuth?err=1" />
+		</session-management>
+
+	</http>
+
+
+	<beans:bean id="userLoginHandler" class="com.tys.spi.app.sec.UserLoginHandler" />
+	<beans:bean id="userSecService" class="com.tys.spi.app.sec.UserSecService" />
+
+	<beans:bean id="md5PasswordEncoder"
+		class="org.springframework.security.authentication.encoding.Md5PasswordEncoder" />
+	
+	<authentication-manager id="user-auth-manager">
+		<authentication-provider user-service-ref="userSecService">
+			<password-encoder ref="md5PasswordEncoder">
+				<!-- <salt-source user-property="username" /> -->
+			</password-encoder>
+		</authentication-provider>
+	</authentication-manager>
+
+
+
+</beans:beans>
+
+

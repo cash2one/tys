@@ -1,0 +1,868 @@
+<section class="content-header">
+	<h1>公司管理</h1>
+	<ol class="breadcrumb">
+		<li><a href="#"><i class="fa fa-dashboard"></i> 首页</a></li>
+		<li class="active">公司</li>
+		<li class="active">代理商管理</li>
+	</ol>
+</section>
+
+<section class="content">
+	<div class="row">
+		<div class="col-md-12">
+			<div class="box box-info">
+				<div class="box-header with-border">
+					<h3 class="box-title">代理商管理</h3>
+					<#if Session.sysUser.userType lte 1> <input type=hidden value=0
+						id="currentAgentType"> <#else> <input type=hidden
+						value=${sysUser.agentType} id="currentAgentType"> </#if> <input
+						type="hidden" id="currentUserType" value=${sysUser.userType}>
+				</div>
+				<div class="box-body">
+					<form id="searchForm" role="form">
+						<div class="row">
+							<div class="col-md-3">
+								<div class="form-group">
+									<label for="exampleInputEmail1">代理商名称</label> <input id="name"
+										name="name" type="text" class="form-control"
+										placeholder="请输入代理商名称">
+								</div>
+							</div>
+							<div class="col-md-3">
+								<div class="form-group">
+									<label>省份</label> <select id="common_province"
+										name="provinceCode" data-placeholder="请选择省份"
+										class="form-control select2">
+									</select>
+								</div>
+							</div>
+							<div class="col-md-3">
+								<div class="form-group">
+									<label>城市</label> <select id="common_city" name="cityCode"
+										data-placeholder="请选择城市" class="form-control select2">
+									</select>
+								</div>
+							</div>
+							<div class="col-md-3">
+								<div class="form-group">
+									<label>区县</label> <select id="common_area" name="areaCode"
+										data-placeholder="请选择区县" class="form-control select2">
+									</select>
+								</div>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-md-3">
+								<div class="form-group">
+									<a id="search" class="btn btn-block btn-social btn-info"> <i
+										class="fa fa-search"></i>查询
+									</a>
+								</div>
+							</div>
+						</div>
+					</form>
+				</div>
+				<div class="box-footer">
+					<div class="row">
+						<div class="col-sm-2">
+							<a class="btn btn-block btn-social btn-danger"> <i
+								class="fa fa-trash"></i> 批量删除
+							</a>
+						</div>
+						<div class="col-sm-2">
+							<a class="btn btn-block btn-social btn-success"> <i
+								class="fa fa-file-excel-o"></i> 批量导入
+							</a>
+						</div>
+						<#if Session.AUTH_1?exists>
+						<div class="col-sm-2">
+							<a data-toggle='modal' href="#newModal"
+								class="btn btn-block btn-social btn-success"> <i
+								class="fa fa-plus"></i> 添加
+							</a>
+						</div>
+						</#if>
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-sm-12" style="padding: 20px;">
+						<table id="agent_table" width="100%"
+							class="table table-bordered table-hover table-striped">
+							<thead>
+								<tr>
+									<th class="center" width="5%"><label> <input
+											type="checkbox" class="ace" id="selectAll" /> <span
+											class="lbl"></span>
+									</label></th>
+									<th>代理商账号</th>
+									<th>姓名</th>
+									<th>电话</th>
+									<th>邮箱</th>
+									<th>代理级别</th>
+									<th>代理地区</th>
+									<th>详细地址</th>
+									<th>创建时间</th>
+									<th>操作</th>
+								</tr>
+							</thead>
+						</table>
+					</div>
+				</div>
+
+				<div class="container">
+					<div id="newModal" class="modal modal-info" aria-hidden="true">
+						<div class="modal-dialog" style="width: 45%">
+							<div class="modal-content">
+								<div class="modal-header">
+									<a class="close" data-dismiss="modal">×</a>
+									<h4 id="title">代理商信息</h4>
+								</div>
+								<div class="modal-body">
+									<form id="newForm" class="form-horizontal" role="form">
+										<input type="hidden" id="agentId" name="id">
+										<div class="form-group">
+											<label for="name" class="col-sm-3 control-label">登录名</label>
+											<div class="col-sm-6">
+												<div class="input-group">
+													<div class="input-group-addon">
+														<i class="fa fa-user"></i>
+													</div>
+													<input id="loginName" name="loginName" type="text"
+														class="form-control">
+												</div>
+											</div>
+											<span id="checkMsg" style="color: red;display: none;">此登录名已经被使用！</span>
+										</div>
+										<div class="form-group">
+											<label for="name" class="col-sm-3 control-label">代理商姓名</label>
+											<div class="col-sm-6">
+												<div class="input-group">
+													<div class="input-group-addon">
+														<i class="fa fa-user"></i>
+													</div>
+													<input id="names" name="name" type="text"
+														class="form-control">
+												</div>
+											</div>
+										</div>
+										<div class="form-group" id="pwd">
+											<label for="name" class="col-sm-3 control-label">密码</label>
+											<div class="col-sm-6">
+												<div class="input-group">
+													<div class="input-group-addon">
+														<i class="fa fa-lock"></i>
+													</div>
+													<input id="password" name="password" type="password"
+														class="form-control">
+												</div>
+											</div>
+										</div>
+										<div class="form-group" id="pwd1">
+											<label for="name" class="col-sm-3 control-label">确认密码</label>
+											<div class="col-sm-6">
+												<div class="input-group">
+													<div class="input-group-addon">
+														<i class="fa fa-lock"></i>
+													</div>
+													<input id="confirm_password" name="confirm_password"
+														type="password" class="form-control">
+												</div>
+											</div>
+										</div>
+										<div class="form-group">
+											<label for="phone" class="col-sm-3 control-label">联系电话</label>
+											<div class="col-sm-6">
+												<div class="input-group">
+													<div class="input-group-addon">
+														<i class="fa fa-phone"></i>
+													</div>
+													<input id="phone" name="phone" type="text"
+														class="form-control">
+												</div>
+											</div>
+										</div>
+										<div class="form-group">
+											<label for="phone" class="col-sm-3 control-label">邮箱</label>
+											<div class="col-sm-6">
+												<div class="input-group">
+													<div class="input-group-addon">
+														<i class="fa fa-at"></i>
+													</div>
+													<input type="text" name="email" class="form-control"
+														id="email">
+												</div>
+											</div>
+										</div>
+										<div class="form-group" id="agent">
+											<label class="col-sm-3 control-label">代理类型</label>
+											<div class="col-sm-6">
+												<input type="radio" id="s1" name="agentType" value="0"
+													style="position: absolute; opacity: 0;">&nbsp;省级代理&nbsp;&nbsp;&nbsp;
+
+												<input type="radio" id="s2" name="agentType" value="1"
+													style="position: absolute; opacity: 0;">&nbsp;市级代理&nbsp;&nbsp;&nbsp;
+
+												<input type="radio" id="s3" name="agentType" value="2"
+													style="position: absolute; opacity: 0;">&nbsp;区级代理&nbsp;&nbsp;&nbsp;
+											</div>
+										</div>
+										<div class="form-group" id="province">
+											<label for="phone" class="col-sm-3 control-label">省份</label>
+											<div class="col-sm-6">
+												<select id="province_id" data-placeholder="请选择省份"
+													style="width: 100%" class="form-control select2">
+												</select>
+											</div>
+											<span id="provinceMsg" style="color: red; display: none;">请选择省份</span>
+										</div>
+										<div class="form-group" id="city">
+											<label for="phone" class="col-sm-3 control-label">市级</label>
+											<div class="col-sm-6">
+												<select id="city_id" data-placeholder="请选择城市"
+													style="width: 100%" class="form-control select2"></select>
+											</div>
+											<span id="cityMsg" style="color: red; display: none;">请选择城市</span>
+										</div>
+										<div class="form-group" id="area">
+											<label for="phone" class="col-sm-3 control-label">地区</label>
+											<div class="col-sm-6">
+												<select id="area_id" data-placeholder="请选择区县"
+													style="width: 100%" class="form-control select2"></select>
+											</div>
+											<span id="areaMsg" style="color: red; display: none;">请选择区县</span>
+										</div>
+										<div class="form-group">
+											<label class="col-sm-3 control-label">详细地址</label>
+											<div class="col-sm-6">
+												<div class="input-group">
+													<div class="input-group-addon">
+														<i class="fa fa-home"></i>
+													</div>
+													<input type="text" class="form-control" id="address"
+														name="address">
+												</div>
+											</div>
+										</div>
+										<div class="form-group">
+											<label class="col-sm-3 control-label">权限分配</label>
+											<div class="col-sm-6">
+												<span id="errorMsg" style="display: none;"><font
+													style="color: red">*你必须为这个代理商配置权限！</font></span>
+												<div id="treeview-checkable"></div>
+											</div>
+										</div>
+									</form>
+								</div>
+								<div class="modal-footer">
+									<a href="#" id="newSubmit" class="btn btn-success">提交</a> <a
+										href="#" class="btn btn-default" data-dismiss="modal">取消</a>
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<div id="deleteModal" class="modal modal-warning"
+						aria-hidden="true">
+						<div class="modal-dialog">
+							<div class="modal-content">
+								<div class="modal-header">
+									<a class="close" data-dismiss="modal">×</a>
+									<h4>警告</h4>
+								</div>
+								<div class="modal-body">
+									<p>你确定要删除这条信息吗？</p>
+								</div>
+								<div class="modal-footer">
+									<a id="del" href="#" class="btn btn-danger">确认</a> <a href="#"
+										class="btn btn-default" data-dismiss="modal">取消</a>
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<div id="warnModal" class="modal modal-warning" aria-hidden="true">
+						<div class="modal-dialog">
+							<div class="modal-content">
+								<div class="modal-header">
+									<a class="close" data-dismiss="modal">×</a>
+									<h4>警告</h4>
+								</div>
+								<div class="modal-body">
+									<p id="msg"></p>
+								</div>
+								<div class="modal-footer">
+									<a href="#" class="btn btn-default" data-dismiss="modal">关闭</a>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</section>
+
+<script>
+	var table;
+	var treeData;
+	var agentId;
+	$(function() {
+		initSearchSelect2();
+
+		initAgentType();
+
+		$('input[type="radio"]').iCheck({
+			radioClass : 'iradio_flat-green'
+		});
+
+		$("#selectAll").on('click',function(){
+			var that = this;
+			$("input[name='checkbox']").each(function(){
+				var v = $(that)[0].checked;
+				$(this)[0].checked=v;
+			});
+		});
+		
+		initSelect2("province_id", true, "getaddress");
+		$('#city_id').select2();
+		$('#area_id').select2();
+
+		$('input[type="radio"]').on('ifClicked', function() {
+			var agentType = $(this).val();
+			switch (agentType) {
+			case '0':
+				$("#province").show();
+				$("#city").hide();
+				$("#area").hide();
+				break;
+			case '1':
+				$("#province").show();
+				$("#city").show();
+				$("#area").hide();
+				break;
+			case '2':
+				$("#province").show();
+				$("#city").show();
+				$("#area").show();
+				break;
+			}
+		});
+
+		$('input[type="radio"]').on('ifChanged', function() {
+			var agentType = $(this).val();
+			$("#province_id").val(null).trigger("change");
+			$("#city_id").val(null).trigger("change");
+			$("#area_id").val(null).trigger("change");
+
+			if (agentType == 0) {
+				initSelect2("province_id", true, "getaddress?type=0");
+			}
+			if (agentType == 1) {
+				initSelect2("province_id", false, "getaddress?type=0");
+			}
+		});
+
+		//如果是创建省级代理(agentType=0),province_id可以选择多个
+		//如果是创建市级代理(agentType=1),province_id只能选择一个
+		$('#province_id').change(
+				function() {
+					$('#city_id').val(null).trigger("change");
+
+					var agentType = $('input[type="radio"]:checked').val();
+					var province = $('#province_id').val();
+
+					//创建区级代理
+					if (agentType == 1 || agentType == 2) {
+						if (province == null) {
+							$('#city_id').val(null).trigger("change");
+						} else {
+							if (agentType == 1) {
+								initSelect2("city_id", true,
+										'getaddress?type=1&code=' + province);
+							} else if (agentType == 2) {
+								initSelect2("city_id", false,
+										'getaddress?type=1&code=' + province);
+							}
+						}
+					}
+				});
+
+		$('#city_id').change(
+				function() {
+					$('#area_id').val(null).trigger("change");
+					var agentType = $('input[type="radio"]:checked').val();
+					var city = $('#city_id').val();
+					if (agentType == 2) {
+						if (city == null) {
+							$('#area_id').val(null).trigger("change");
+						} else {
+							initSelect2("area_id", true,
+									"getaddress?type=2&code=" + city);
+						}
+					}
+				});
+
+		table = $('#agent_table')
+				.DataTable(
+						{
+							language : {
+								url : '${base}/resources/dist/json/DataTableCN.json'
+							},
+							autoWidth : true,
+							pagingType : "full_numbers",
+							paging : true, //是否分页。
+							processing : true, //当datatable获取数据时候是否显示正在处理提示信息。 
+							serverSide : true,
+							searching : false,
+							ordering : false,
+							ajax : {
+								url : 'getagentlist'
+							},
+							//必须与table thead中按顺序一一对应
+							columns : [
+							        {
+							        	data : "id"
+							        },
+									{//用户账号
+										data : 'loginName'
+									},
+									{//姓名
+										data : "name"
+									},
+									{//电话
+										data : "phone"
+									},
+									{//邮箱
+										data : 'email'
+									},
+									{
+										data : function(row, type, set) {
+											var agentType = row.agentType;
+											switch (agentType) {
+											case 0:
+												return "省级代理";
+												break;
+											case 1:
+												return "市级代理";
+												break;
+											case 2:
+												return "区级代理";
+												break;
+											}
+										}
+									},
+									{//所属地区
+										data : function(row, type, set) {
+											var agentType = row.agentType;
+
+											switch (agentType) {
+											case 0:
+												var str = "【";
+												$.each(row.userArea, function(
+														i, n) {
+													str += n.dProvince.name
+															+ " ";
+												});
+												return str + "】";
+												break;
+											case 1:
+												var str = "";
+												$.each(row.userArea, function(
+														i, n) {
+													str += n.dCity.name + " ";
+												});
+												return row.userArea[0].dProvince.name
+														+ "【" + str + "】";
+												break;
+											case 2:
+												var str = "";
+												$.each(row.userArea, function(
+														i, n) {
+													str += n.dArea.name + " ";
+												});
+												return row.userArea[0].dProvince.name
+														+ " "
+														+ row.userArea[0].dCity.name
+														+ "【" + str + "】";
+												break;
+											}
+										}
+									},
+									{//详细地址
+										data : "address"
+									},
+									{
+										data : function(row, type, set) {
+											var time = new Date(row.createTime);
+											return time.format("yyyy-MM-dd hh:mm:ss");
+										}
+									},
+									{//操作
+										data : function(row, type, set) {
+											return "<a onclick='toUpdateAgent("
+													+ row.id
+													+ ")' class='btn btn-success btn-xs'>修改</a>&nbsp;&nbsp;"
+													+ "<a onclick='toRemoveAgent("
+													+ row.id
+													+ ")' class='btn btn-danger btn-xs'>删除</a>";
+										}
+									} ],
+									columnDefs:[{
+										targets: 0,
+							            data: "id",
+							            render: function (data, type, full, meta) {
+							            	return '<input type="checkbox" value="' + data + '" title="' + data + '" id="checkbox" name="checkbox"/>';
+							            }
+									}]
+						});
+		/*搜索代理商*/
+		var searchAgent = $("#search").click(function() {
+			var param = $("#searchForm").serialize();
+			table.ajax.url('searchagent?' + param).load();
+		});
+
+		var newAgent = $('#newSubmit').on(
+				'click',
+				function() {
+					var id = $("#id").val();
+					var loginName = $("#loginName").val();
+					var name = $("#names").val();
+					var password = $("#password").val();
+					var phone = $("#phone").val();
+					var email = $("#email").val();
+					var address = $("#address").val();
+					var agentType = $('input[type="radio"]:checked').val();
+					var provinceCode = $("#province_id").val();
+					var cityCode = $("#city_id").val();
+					var areaCode = $("#area_id").val();
+
+					var param = "loginName=" + loginName + "&name=" + name
+							+ "&password=" + password + "&phone=" + phone
+							+ "&email=" + email + "&address=" + address
+							+ "&agentType=" + agentType;
+
+					if (id != null) {
+						param += "&id=" + id;
+					}
+
+					var permissions = [];
+					var nodes = $("#treeview-checkable").jqxTree(
+							'getCheckedItems');
+
+					if ($('#newForm').valid()) {
+
+						if (nodes.length == 0) {
+							$("#errorMsg").show();
+							return false;
+						} else {
+							$("#errorMsg").hide();
+						}
+
+						if (agentType == 0) {
+							if (provinceCode == null) {
+								$("#provinceMsg").show();
+								return false;
+							} else {
+								$("#provinceMsg").hide();
+								param += "&provinceCodes=" + provinceCode;
+							}
+						}
+
+						if (agentType == 1) {
+							if (provinceCode == null) {
+								$("#provinceMsg").show();
+								return false;
+							} else if (cityCode == null) {
+								$("#cityMsg").show();
+								return false;
+							}
+							$("#provinceMsg,#cityMsg").hide();
+							param += "&provinceCodes=" + provinceCode;
+							param += "&cityCodes=" + cityCode;
+						}
+
+						if (agentType == 2) {
+							if (provinceCode == null) {
+								$("#provinceMsg").show();
+								return false;
+							} else if (cityCode == null) {
+								$("#cityMsg").show();
+								return false;
+							} else if (areaCode == null) {
+								$("#areaMsg").show();
+								return false;
+							}
+							$("#provinceMsg,#cityMsg,#areaMsg").hide();
+							param += "&provinceCodes=" + provinceCode;
+							param += "&cityCodes=" + cityCode;
+							param += "&areaCodes=" + areaCode;
+						}
+
+						for ( var i in nodes) {
+							permissions[i] = nodes[i].value;
+						}
+						var str = permissions.join(",");
+						param += "&permissions=" + str;
+
+						AjaxUtils('mergeagent', 'POST', param, function() {
+							table.ajax.reload();
+							$('#newModal').modal('hide');
+						});
+					}
+					return;
+				});
+
+		var validator = $("#newForm")
+				.validate(
+						{
+							errorElement : 'span',
+							errorClass : 'help-block',
+							focusCleanup : true,
+							rules : {
+							loginName : {
+								minlength : 6,
+								required : true
+								},
+								name : "required",
+								email : {
+									email : true
+								},
+								password : {
+									required : true,
+									minlength : 6,
+									maxlength : 64
+								},
+								confirm_password : {
+									required : true,
+									minlength : 6,
+									maxlength : 64,
+									equalTo : "#password"
+								},
+								phone : {
+									required : true
+								}
+							},
+							messages : {
+								name : "请输入姓名",
+								loginName : {
+									required :  "请输入账户名",
+									minlength : "长度至少为6个字符",
+								},
+								email : {
+									email : "请输入正确的email地址"
+								},
+								password : {
+									required : "请输入密码",
+									minlength : "长度至少为6个字符",
+									maxlength : "密码长度超过最大限制"
+								},
+								confirm_password : {
+									required : "请输入确认密码",
+									minlength : "确认密码不能小于6个字符",
+									maxlength : "密码长度超过最大限制",
+									equalTo : "两次输入密码不一致不一致"
+								},
+								phone : {
+									required : "请输入电话号码"
+								}
+							},
+							//自定义错误消息放到哪里
+							errorPlacement : function(error, element) {
+								element.next().remove();//删除显示图标
+								element
+										.after('<span class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>');
+								element.closest('.form-group').append(error);//显示错误消息提示
+							},
+							//给未通过验证的元素进行处理
+							highlight : function(element) {
+								$(element).closest('.form-group').addClass(
+										'has-error has-feedback');
+							},
+							//验证通过的处理
+							success : function(label) {
+								var el = label.closest('.form-group').find(
+										"select");
+								el.next().remove();//与errorPlacement相似
+								el
+										.after('<span class="glyphicon glyphicon-ok form-control-feedback" aria-hidden="true"></span>');
+
+								var el1 = label.closest('.form-group').find(
+										"input");
+								el1.next().remove();//与errorPlacement相似
+								el1
+										.after('<span class="glyphicon glyphicon-ok form-control-feedback" aria-hidden="true"></span>');
+
+								label.closest('.form-group').removeClass(
+										'has-error').addClass(
+										"has-feedback has-success");
+								label.remove();
+							}
+						});
+
+		$.ajax({
+			url : 'gettreeview',
+			type : 'get',
+			dataType : 'json',
+			async : false,
+			success : function(data) {
+				treeData = data;
+			}
+		});
+
+		var source = {
+			datatype : "json",
+			datafields : [ {
+				name : 'id'
+			}, {
+				name : 'parentid'
+			}, {
+				name : 'text'
+			}, {
+				name : 'value'
+			} ],
+			id : 'id',
+			localdata : treeData
+		};
+		// create data adapter.
+		var dataAdapter = new $.jqx.dataAdapter(source);
+		// perform Data Binding.
+		dataAdapter.dataBind();
+		// get the tree items. The first parameter is the item's id. The second parameter is the parent item's id. The 'items' parameter represents 
+		// the sub items collection name. Each jqxTree item has a 'label' property, but in the JSON data, we have a 'text' field. The last parameter 
+		// specifies the mapping between the 'text' and 'label' fields.  
+		var records = dataAdapter.getRecordsHierarchy('id', 'parentid',
+				'items', [ {
+					name : 'text',
+					map : 'label'
+				} ]);
+		$('#treeview-checkable').jqxTree({
+			source : records,
+			hasThreeStates : true,
+			checkboxes : true,
+			theme : "bootstrap"
+		});
+
+		var removeAgent = $("#del").click(function() {
+			AjaxUtils("deleteagent", "GET", "id=" + agentId, function() {
+				$("#deleteModal").modal('hide');
+				table.ajax.reload();
+			});
+		});
+
+		$('#loginName').keyup(function(){
+			var loginName = $('#loginName').val();
+			AjaxUtils("checkLoginName", "GET", "loginName="+loginName, function(data){
+				if(data.success){
+					$('#checkMsg').show();
+				}else{
+					$('#checkMsg').hide();
+				}
+			});
+		});
+		
+		//添加模态框隐藏后触发改事件
+		$('#newModal').on(
+				'hide.bs.modal',
+				function() {
+					//清除验证错误信息
+					validator.resetForm();
+					//清空表单数据
+					$('#newForm').get(0).reset();
+
+					initAgentType();
+
+					$('#province_id').val(null).trigger("change");
+					$('#city_id').val(null).trigger("change");
+					$('#area_id').val(null).trigger("change");
+
+					//兼容性存在问题
+					//$('#treeview-checkable').jqxTree('collapseAll');
+					$('#treeview-checkable').jqxTree('uncheckAll');
+
+					$("#province,#city,#area").show();
+					
+					//清除错误信息残留样式
+					$('#newModal .form-group').removeClass(
+							"has-error has-success has-feedback");
+					$('#newModal .form-group').find("span").removeClass(
+							"glyphicon-ok glyphicon-remove");
+				});
+	});
+
+	function toUpdateAgent(id) {
+		AjaxUtils("getagentinfo", "GET", "id=" + id, function(data) {
+			$("#agentId").val(data.agent.id);
+			$("#loginName").val(data.agent.loginName);
+			$("#names").val(data.agent.name);
+			$("#phone").val(data.agent.phone);
+			$("#email").val(data.agent.email);
+			$("#address").val(data.agent.address);
+
+			$("#pwd,#pwd1,#agent").hide();
+			$("#province,#city,#area").hide();
+
+			$.each(data.permission, function(i, n) {
+				$("#treeview-checkable").jqxTree('checkItem',
+						$("#" + n.permissionId)[0], true);
+			});
+			$("#newModal").modal('show');
+		});
+	}
+
+	function toRemoveAgent(id) {
+		agentId = id;
+		//判断要删除的是不是本人    //判断该用户的层级关系
+		AjaxUtils("todelete", "GET", "id=" + id, function(data) {
+			if (data.canRemove == 0) {
+				$("#msg").empty().append(data.msg);
+				$("#warnModal").modal('show');
+			} else {
+				$("#deleteModal").modal('show');
+			}
+		});
+	}
+
+	function initAgentType() {
+		var type = $('#currentAgentType').val();
+		switch (type) {
+		case '0':
+			$('#city').hide();
+			$('#area').hide();
+			$('#s1').iCheck('check');
+			break;
+		case '1':
+			$('#area').hide();
+			$('#s1').iCheck('disable');
+			$('#s2').iCheck('check');
+			break;
+		case '2':
+			$('#s1').iCheck('disable');
+			$('#s2').iCheck('disable');
+			$('#s3').iCheck('check');
+			break;
+		}
+	}
+
+	function initSearchSelect2() {
+		initSelect2("common_province", false, "getaddress?type=0");
+		$('#common_city').select2();
+		$('#common_area').select2();
+
+		$('#common_province').change(
+				function() {
+					$("#common_city").val(null).trigger("change");
+					$("#common_area").val(null).trigger("change");
+					var province = $('#common_province').val();
+					initSelect2("common_city", false, "getaddress?type=1&code="
+							+ province);
+				});
+
+		$('#common_city').change(
+				function() {
+					$("#common_area").val(null).trigger("change");
+					var city = $('#common_city').val();
+					initSelect2("common_area", false, "getaddress?type=2&code="
+							+ city);
+				});
+	}
+</script>

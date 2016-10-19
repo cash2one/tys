@@ -1,0 +1,47 @@
+<?xml version="1.0"?>
+<project
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
+	xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>com.tys</groupId>
+		<artifactId>tys</artifactId>
+		<version>1.0</version>
+	</parent>
+	<artifactId>tys-hw-detector</artifactId>
+	<name>tys-hw-detector</name>
+	<url>http://maven.apache.org</url>
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+	</properties>
+	
+	<dependencies>
+		<dependency>
+            <groupId>io.netty</groupId>
+            <artifactId>netty-all</artifactId>
+            <version>4.0.23.Final</version>
+        </dependency>
+        
+		<dependency>
+			<groupId>com.tys</groupId>
+			<artifactId>tys-util</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.tys</groupId>
+			<artifactId>tys-dao</artifactId>
+		</dependency>
+		
+		<dependency>
+			<groupId>com.tys</groupId>
+			<artifactId>tys-hw</artifactId>
+			<version>1.0</version>
+		</dependency>
+		
+		
+		<dependency>
+			<groupId>com.tys</groupId>
+			<artifactId>tys-push</artifactId>
+			<version>1.0</version>
+		</dependency>
+	</dependencies>
+</project>

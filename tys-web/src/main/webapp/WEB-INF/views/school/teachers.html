@@ -1,0 +1,497 @@
+<section class="content-header">
+	<h1>
+		教师管理 <small></small>
+	</h1>
+	<ol class="breadcrumb">
+		<li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+		<li class="active">教师信息</li>
+	</ol>
+</section>
+
+<section class="content">
+	<div class="row">
+		<div class="col-md-12">
+			<div class="box box-info">
+				<div class="box-header with-border">
+					<h3 class="box-title">教师信息管理</h3>
+				</div>
+				<div class="box-body">
+					<form id="searchForm" role="form">
+						<div class="row">
+							<div class="col-md-3">
+								<div class="form-group">
+									<label>省</label>
+									<input type="hidden" name="addrCodeMind" title="设置查询时其地域信息所属主体" value="school"/>
+									<select id="common_province" class="form-control">
+									</select>
+								</div>
+							</div>
+							<div class="col-md-3">
+								<div class="form-group">
+									<label>市</label>
+									<select id="common_city" class="form-control">
+									</select>
+								</div>
+							</div>
+							<div class="col-md-3">
+								<div class="form-group">
+									<label>区</label>
+									<select id="common_area" class="form-control">
+									</select>
+								</div>
+							</div>
+							<div class="col-md-3">
+								<div class="form-group">
+									<label>学校名称</label>
+									<input type="text" name="s_schoolName" class="form-control"  placeholder="请输入学校名称">
+								</div>
+							</div>
+							<div class="col-md-3">
+								<div class="form-group">
+									<label>教师名称：</label>
+									<input type="text" name="s_name" class="form-control"  placeholder="请输入教师名称">
+								</div>
+							</div>
+							<div class="col-md-3">
+								<div class="form-group">
+									<label>手机号码：</label>
+									<input type="text" name="s_phone" class="form-control"  placeholder="请输入手机号码">
+								</div>
+							</div>
+							<div class="col-md-3">
+								<div class="form-group">
+									<label>平安家校通账号：</label>
+									<input type="text" name="s_custAcct" class="form-control"  placeholder="请输入平安家校通账号">
+								</div>
+							</div>
+							<div class="col-sm-2">
+								<div class="form-group">
+									<label></label>
+									<a id="search" class="btn btn-block btn-social btn-info">
+										<i class="fa fa-search"></i> 查询
+									</a>
+								</div>
+							</div>
+						</div>
+					</form>
+				</div>
+				<div class="box-footer">
+					<div class="row">
+						<div class="col-sm-2">
+							<a id="batchRemove" class="btn btn-block btn-social btn-danger disabled">
+								<i class="fa fa-trash"></i> 批量删除
+							</a>
+						</div>
+						<div class="col-sm-2">
+							<a class="btn btn-block btn-social btn-success" data-toggle="modal" href="#myModal" onclick="initvalue();">
+								<i class="fa fa-plus"></i> 添加
+							</a>
+						</div>
+						<div class="col-sm-2">
+							<a class="btn btn-block btn-social btn-info">
+								<i class="fa fa-trash"></i> 批量导入
+							</a>
+						</div>
+					</div>
+					<div class="row">
+						<div  style="padding: 20px;">
+							<table id="teacher_table" class="table table-bordered table-hover table-striped">
+								<thead>
+									<tr>
+										<th class="center" width="20px">
+											<label>
+												<input type="checkbox" class="ace" id="selectAll"/>
+												<span class="lbl"></span>
+											</label>
+										</th>
+										<th width="80px">用户ID</th>
+										<th width="120px">用户账号</th>
+										<th width="80px">教师姓名</th>
+										<th width="80px">手机号</th>
+										<th width="40px">性别</th>
+										<th width="80px">生日</th>
+										<th width="80px">任教信息</th>
+										<th width="120px">创建时间</th>
+										<th width="80px">操作</th>
+									</tr>
+								</thead>
+							</table>
+						</div>
+					</div>
+				</div><!-- box-footer end -->
+			</div>
+		</div>
+	</div>
+	
+	<!-- Modal -->
+	<div id="myModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal">
+						<span aria-hidden="true">&times;</span><span class="sr-only">Close</span>
+					</button>
+					<h4 class="modal-title" id="myModalLabel">添加教师信息</h4>
+				</div>
+				<div class="modal-body" style="max-height:400px;overflow:auto;">
+					<form id="add-form" class="form-horizontal add-form" role="form" method="post" action="../sys/mergeteacher">
+						<input type="hidden" name="editid" value='0' />
+						<input type="hidden" name="editrelteacherclassid" value='0' />
+						<div class="form-group">
+							<label for="className" class="col-sm-3 control-label">电话</label>
+							<div class="col-sm-6">
+								<div class="input-group">
+									<div class="input-group-addon">
+										<i class="fa fa-phone"></i>
+									</div>
+									<input name="phone" id="phone" type="text" class="form-control">
+								</div>
+							</div>
+						</div>
+						<div class="form-group">
+							<label for="className" class="col-sm-3 control-label">名称</label>
+							<div class="col-sm-6">
+								<div class="input-group">
+									<div class="input-group-addon">
+										<i class="fa fa-user"></i>
+									</div>
+									<input name="name" type="text" class="form-control">
+								</div>
+							</div>
+						</div>
+						<div class="form-group" id="province">
+							<label class="col-sm-3 control-label">性别</label>
+							<div class="col-sm-6">
+								<select name="sex" id="sex" data-placeholder="请选择性别" style="width: 100%" class="form-control select2">
+									<option value="0">男</option>
+									<option value="1">女</option>
+								</select>
+							</div>
+						</div>
+						<!-- <div class="form-group">
+							<label for="className" class="col-sm-3 control-label">生日</label>
+							<div class="col-sm-6">
+								<div class="input-group">
+									<div class="input-group-addon">
+										<i class="fa fa-user"></i>
+									</div>
+									<input name="birthday" type="date" class="form-control">
+								</div>
+							</div>
+						</div> -->
+						<div class="form-group" id="province">
+							<label class="col-sm-3 control-label">学校</label>
+							<div class="col-sm-6">
+								<select name="schoolId" id="schoolId" data-placeholder="请选择学校" style="width: 100%" class="form-control select2">
+								</select>
+							</div>
+						</div>
+						<div class="form-group" id="province">
+							<label class="col-sm-3 control-label">班级</label>
+							<div class="col-sm-6">
+								<select id="classId" name="classId" data-placeholder="请选择班级" style="width: 100%" class="form-control select2">
+								</select>
+							</div>
+						</div>
+						<div class="form-group" id="province">
+							<label class="col-sm-3 control-label">课程</label>
+							<div class="col-sm-6">
+								<select id="courseId" name="courseId" data-placeholder="请选择课程" style="width: 100%" class="form-control select2">
+								</select>
+							</div>
+						</div>
+					</form>
+				</div>
+				<div class="modal-footer">
+					<button type="button" id="add" class="btn btn-small btn-primary">提交</button>
+					<button type="button" id="cancel" class="btn btn-small btn-danger" data-dismiss="modal">取消</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!--PAGE CONTENT ENDS-->
+	
+	<div id="infoModal" class="modal modal-info" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<a class="close" data-dismiss="modal">×</a>
+					<h4 id="info_title">提示</h4>
+				</div>
+				<div class="modal-body">
+					<p id="msg"></p>
+				</div>
+				<div class="modal-footer">
+					<a href="#" class="btn btn-default" data-dismiss="modal">关闭</a>
+				</div>
+			</div>
+		</div>
+	</div>
+</section>
+
+<script type="text/javascript">
+var rowHash={};
+var table;
+$(function() {
+	initAddrElement();
+	initCourseSelect("courseId");
+	initSchoolClass("schoolId");
+	
+	table = initDataTable('getteacheredt');
+	
+	$(document).keyup(function(event){
+		if(event.keyCode ==13){
+			$("#search").trigger("click");
+		}
+	});
+	
+	$("#selectAll").on('click',function(){
+		var that = this;
+		$("input[name='checkbox']").each(function(){
+			var v = $(that)[0].checked;
+			$(this)[0].checked=v;
+		});
+	});
+	
+	/*搜索*/
+	$("#search").click(function() {
+		var param = $("#searchForm").serialize();
+		var url = 'getteacheredt?'+param+'&t='+(new Date().getTime());
+		table.ajax.url(url).load();
+		//table.fnDestroy();
+		//table = initDataTable(url);
+	});
+	
+	$("#batchRemove").on('click',function(){
+		var ids = '';
+		$("input[name='checkbox']").each(function(index,item){
+			var v = $(this)[0].checked;
+			if(v==true){
+				var id = $(this).val();
+				var currentRow = rowHash[id];
+				ids=ids+id+",";
+			}
+		});
+		
+		if(ids.length<2){
+			alert('请选择需要删除的教师');
+			return false;
+		}
+		
+		if(window.confirm('确认批量删除？')==true){
+			var url='../sys/batchremoveteacher';
+			
+			var param = 'ids='+ids;
+			AjaxUtils(url,'GET',param,function(data){
+				if(data){
+					data = jQuery.parseJSON(data);
+		    		alert(data.data.notice);
+		    		
+		    		loadPage('getteacher');
+	     		}else{
+	     			alert('操作失败！');
+	     		}
+			});
+		}
+	});
+	
+	//初始化编辑模态框的手机号码
+	$("#phone").inputmask("99999999999", {
+		/* "placeholder" : "xxxxxxxxxxx" */
+	});
+	/**/
+	$('#add').on('click', function() {
+		/* var birthday = $("input[name='birthday']").val();
+		if(!birthday){
+			alert('请填写生日');
+			return false;
+		} */
+		if ($('#add-form').valid()) {
+			var url ="../sys/mergeteacher";
+			var param = $('#add-form').serialize();
+			AjaxUtils(url,'POST',param,function(data){
+				if(data){
+					data = jQuery.parseJSON(data);
+		    		//$("#notice-tip").show();
+		    		//$("#notice-span").html(data.data.notice);
+		    		
+		    		if(data.data.result=="success"){
+			    		$("#myModal").modal('hide');
+		    		}
+		    		alert(data.data.notice);
+		    		
+		    		//TODO 后期修改table刷新
+		    		loadPage('getteacher');
+	     		}else{
+	     			alert('操作失败！');
+	     		}
+			});
+		}
+	});
+	
+	$("#schoolId").on('change',function(){
+		var schoolId = $(this).val();
+		if(schoolId){
+			initClassSelect("classId",schoolId);
+		}
+	});
+	
+	var rules = {phone:"required",name:"required",schoolId:"required",birthday:"required",sex:"required"};
+	var messages = {phone:"请输入电话",name:"请输入名称",schoolId:"请选择学校",birthday:"请输入生日",sex:"请选择性别"};
+	var validator = validatorUtils('add-form',rules,messages);
+	//初始化编辑模态框的手机号码
+	$("#phone").inputmask("99999999999", {
+		"placeholder" : "xxxxxxxxxxx"
+	});
+	
+	//添加模态框隐藏后触发改事件
+	$('#myModal').on('hide.bs.modal',function(){
+		//清除验证错误信息
+		validator.resetForm();
+		//清空表单数据
+		$('#add-form').get(0).reset();
+		
+		//清除错误信息残留样式
+		$('#myModal .form-group').removeClass("has-error has-success has-feedback");
+		$('#myModal .form-group').find("span").removeClass("glyphicon-ok glyphicon-remove");
+	});
+});
+
+function initDataTable(url){
+	var id="teacher_table";
+	var columns = [{//多选框
+		data: "id"
+	}, {//用户id
+		data: "id",
+		defaultContent : ''
+	},{//平安账号
+		data: "custAcct",
+		defaultContent : ''
+	}, {//教师名称
+		data: "name",
+		defaultContent : ''
+	}, {//手机号
+		data: "phone",
+		defaultContent : ''
+	}, {//性别
+		data: function(row, type, set) {
+			return row.sex==0?'男':'女';
+		}
+	}, {//生日
+		data: function(row, type, set){
+			var val = row.birthday;
+			if(!val){
+				return "";
+			}else{
+				var d = new Date(val);
+				return d.format("yyyy-MM-dd");
+			}
+			return "";
+		},
+		defaultContent : ''
+	}, {//任教信息
+		data: function(row, type, set) {
+			return '<input type="button" class="btn btn-info btn-sm" value="任教信息" title="' + row.id + '" onclick="fnShowModalTeacher('+row.id+')"/>';
+		},
+		defaultContent : ''
+	}, {//创建时间
+		data: function(row, type, set){
+			var val = row.createTime;
+			if(!val){
+				return "";
+			}else{
+				var d = new Date(val);
+				return d.format("yyyy-MM-dd hh:mm:ss");
+			}
+			return "";
+		},
+		defaultContent : ''
+	/*}, {//初始密码
+		data: "pw",
+		defaultContent : ''*/
+	}, {//操作
+		data: function (row, type, set) {
+			rowHash[row.id] = row;
+        	return '<input type="button" data-toggle="modal" href="#myModal" onclick="setvalue(' + row.id + ')" class="btn btn-success btn-sm" value="修改" />&nbsp;&nbsp;<input type="button" onclick="removevalue(' + row.id + ')" class="btn btn-danger btn-sm" value="删除"/>';
+        }
+	}];
+	return initTable(id,url,columns);
+}
+
+function initvalue(){
+	$("input[name='editid']").val(0);
+	$('#add-form')[0].reset();
+	$("#myModalLabel").html("添加教师信息");
+}
+
+function setvalue(id){
+	initvalue();
+	$("#myModalLabel").html("修改教师信息");
+	var proIdArray = ["sex"];
+	var proNameArray = ["custAcct","name","phone","sex","birthday"];
+	$("input[name='editid']").val(id);
+	
+	var currentRow = rowHash[id];
+	for(var i=0;i<proIdArray.length;i++){
+		$("#"+proIdArray[i]).val(currentRow[proIdArray[i]]);
+	}
+	for(var i=0;i<proNameArray.length;i++){
+		if(proNameArray[i]=="birthday"){//时间更新还有点bug,后面更新
+			$("input[name='"+proNameArray[i]+"']").val(currentRow[proNameArray[i]]);
+			continue;
+		}
+		$("input[name='"+proNameArray[i]+"']").val(currentRow[proNameArray[i]]);
+	}
+	
+	//处理特殊属性的值  "editrelteacherclassid"
+	//$("input[name='loginName']").val(currentRow.sysUser.loginName);
+}
+
+function fnShowModalTeacher(id){
+	var url='../sys/getclassesteacher';
+	var title = '任教信息';
+	var param = 'id='+id;
+	AjaxUtils(url,'GET',param,function(data){
+		if(data){
+    		var objarry = data.data.teacherClassInfo;
+    		
+    		var msg='';
+    		for(var i=0;i<objarry.length;i++){
+    			if(i!=0){
+    				msg=msg+"<br>";
+    			}
+    			msg=msg+"姓名："+objarry[i].mdUser.name+",班级："+objarry[i].mdClass.className+",课程："+objarry[i].mdCourse.name;
+    		}
+    		if(''==msg){
+    			msg="未找到相关信息！";
+    		}
+    		$("#info_title").empty().append(title);
+    		$("#msg").empty().append(msg);
+			$("#infoModal").modal('show');
+ 		}else{
+ 			alert('操作失败！');
+ 		}
+	});
+}
+
+function removevalue(id,name){
+	var currentRow = rowHash[id];
+	if(window.confirm('确认删除 '+currentRow.name+' ？')==true){
+		var url='../sys/removeteacher';
+		var param = 'id='+id;
+		AjaxUtils(url,'GET',param,function(data){
+			if(data){
+	    		//$("#notice-tip").show();
+	    		//$("#notice-span").html(data.data.notice);
+	    		
+	    		alert(data.data.notice);
+	    		
+	    		table.ajax.reload();
+	    		//loadPage('getteacher');
+     		}else{
+     			alert('操作失败！');
+     		}
+		});
+	}
+}
+</script>

@@ -1,0 +1,127 @@
+<aside class="main-sidebar">
+	<!-- sidebar: style can be found in sidebar.less -->
+	<section class="sidebar">
+		<!-- sidebar menu: : style can be found in sidebar.less -->
+		<ul class="sidebar-menu">
+			<li class="header">功能导航</li>
+			
+			<li class="active">
+				<a href="index"> <i class="fa fa-th"></i> <span>首页</span>
+						<small class="label pull-right bg-yellow">new</small>
+				</a>
+			</li>
+			
+			<li class="treeview">
+				<a href="#">
+					<i class="fa fa-dashboard"></i> <span>公司</span>
+					<i class="fa fa-angle-left pull-right"></i>
+				</a>
+				<ul class="treeview-menu">
+					<li><a href="#" onclick="loadPage('getemployee')"><i class="fa fa-circle-o text-aqua"></i>员工管理</a></li>
+						<!-- 是否具有查询代理商（code=0）的权限 -->
+						<#if Session.AUTH_0?exists>					
+							<li><a href="#" onclick="loadPage('getagent')"><i class="fa fa-circle-o text-aqua"></i>代理商管理</a></li>
+						</#if>					
+				</ul>
+			</li>
+			
+			<li class="treeview">
+				<a href="#">
+					<i class="fa fa-dashboard"></i> <span>设备管理</span>
+					<i class="fa fa-angle-left pull-right"></i>
+				</a>
+				<ul class="treeview-menu">
+					<li><a href="#" onclick="loadPage('equipmentStock')"><i class="fa fa-circle-o text-aqua"></i>库存信息<small class="label pull-right bg-red">1000</small></a></li>
+					<li><a href="#" onclick="loadPage('equipmentSales')"><i class="fa fa-circle-o text-aqua"></i>已售设备</a></li>
+					<li><a href="#"><i class="fa fa-circle-o text-aqua"></i>探头管理</a></li>
+					<li><a href="#"><i class="fa fa-circle-o text-aqua"></i>硬件产品</a></li>
+				</ul>
+			</li>
+			
+			<li class="treeview"><a href="#">
+				<i class="fa fa-share"></i>
+				<span>学校</span>
+				<i class="fa fa-angle-left pull-right"></i>
+			</a>
+				<ul class="treeview-menu">
+					<#if Session.AUTH_200?exists>	
+						<li><a href="#" onclick="loadPage('getschool')"><i class="fa fa-circle-o text-aqua"></i>学校管理</a></li>
+					</#if>
+					<li><a href="#"><i class="fa fa-circle-o text-aqua"></i>班级管理<i class="fa fa-angle-left pull-right"></i></a>
+						<ul class="treeview-menu">
+							<li><a href="#" onclick="loadPage('getclass')"><i class="fa fa-circle-o text-aqua"></i>班级列表</a></li>
+							<li><a href="#"><i class="fa fa-circle-o text-aqua"></i>班级考勤</a></li>
+						</ul>
+					</li>
+					<li><a href="#" onclick="loadPage('getteacher')"><i class="fa fa-circle-o text-aqua"></i>教师管理</a></li>
+					<li><a href="#" onclick="loadPage('getstudent')"><i class="fa fa-circle-o text-aqua"></i>学生管理</a></li>
+					<li><a href="#" onclick="loadPage('getparents')"><i class="fa fa-circle-o text-aqua"></i>家长管理</a></li>
+					<li><a href="#" onclick="loadPage('gethomework')"><i class="fa fa-circle-o text-aqua"></i>作业管理</a></li>
+				</ul>
+			</li>
+			
+			
+			
+			<li>
+				<a href="#"> <i class="fa fa-th"></i><span>问答管理</span>
+					<small class="label pull-right bg-green">new</small>
+				</a>
+			</li>
+			
+			
+			<li class="treeview">
+				<a href="#">
+					<i class="fa fa-dashboard"></i> <span>家教培训</span>
+					<i class="fa fa-angle-left pull-right"></i>
+				</a>
+				<ul class="treeview-menu">
+					<li><a href="#"><i class="fa fa-circle-o text-aqua"></i>培训信息</a></li>
+					<li><a href="#"><i class="fa fa-circle-o text-aqua"></i>培训机构</a></li>
+				</ul>
+			</li>
+			
+			<li class="treeview">
+				<a href="#">
+					<i class="fa fa-dashboard"></i> <span>资源管理</span>
+					<i class="fa fa-angle-left pull-right"></i>
+				</a>
+				<ul class="treeview-menu">
+					<li><a href="#" onclick="loadPage('getfiles')"><i class="fa fa-circle-o text-aqua"></i>文件管理</a></li>
+					<li><a href="#" onclick="loadPage('getsoftware')"><i class="fa fa-circle-o text-aqua"></i>软件管理</a></li>
+				</ul>
+			</li>
+			<li class="treeview">
+				<a href="#">
+					<i class="fa fa-dashboard"></i> <span>新闻资讯</span>
+					<i class="fa fa-angle-left pull-right"></i>
+				</a>
+				<ul class="treeview-menu">
+					<li><a href="#"><i class="fa fa-circle-o text-aqua"></i>广告管理</a></li>
+					<li><a href="#" onclick="loadPage('getinformations')"><i class="fa fa-circle-o text-aqua"></i>家校资讯</a></li>
+					<li><a href="#"><i class="fa fa-circle-o text-aqua"></i>同步课堂</a></li>
+				</ul>
+			</li>
+			
+			<li class="treeview">
+				<a href="#">
+					<i class="fa fa-dashboard"></i> <span>大爱无疆</span>
+					<i class="fa fa-angle-left pull-right"></i>
+				</a>
+				<ul class="treeview-menu">
+					<li><a href="#"><i class="fa fa-circle-o text-aqua"></i>救助信息管理</a></li>
+					<li><a href="#"><i class="fa fa-circle-o text-aqua"></i>失踪线索管理</a></li>
+					<li><a href="#"><i class="fa fa-circle-o text-aqua"></i>爱心大使</a></li>
+					<li><a href="#"><i class="fa fa-circle-o text-aqua"></i>核查监督</a></li>
+				</ul>
+			</li>
+		</ul>
+	</section>
+</aside>
+
+<script type="text/javascript">
+function loadPage(url){
+	/* var obj = $(this).parent();
+	obj.addClass("active"); */
+	$('#main_content').load(url);
+}
+</script>

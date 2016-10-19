@@ -1,0 +1,117 @@
+<beans:beans xmlns="http://www.springframework.org/schema/security"
+	xmlns:beans="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+           http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+           http://www.springframework.org/schema/security
+           http://www.springframework.org/schema/security/spring-security.xsd">
+
+
+	<!-- 管理后台 APP老师账号登录 -->
+	<http pattern="/sys/teacher/**" auto-config="true" use-expressions="false"
+		authentication-manager-ref="teacher-admin-authentication-manager">
+		<intercept-url pattern="/sys/**" access="ROLE_ADMIM" />
+
+		<form-login login-page='/login.html' authentication-failure-url="/login.html?error=true"
+			authentication-success-handler-ref="teacherAdminHandler"
+			login-processing-url="/sys/teacher/adminLogin" username-parameter="account"
+			password-parameter="password" />
+			
+		<logout logout-url="/sys/teacher/adminLogout" logout-success-url="/login.html"
+			invalidate-session="true" delete-cookies="true" />
+
+		<session-management
+			session-authentication-error-url="/login.html?serr"
+			invalid-session-url="/login.html?invalid">
+			<concurrency-control max-sessions="1"
+				error-if-maximum-exceeded="false" expired-url="/login.html?ot" />
+		</session-management>
+	</http>
+
+	<beans:bean id="teacherAdminHandler" class="com.tys.sec.SysTeacherLoginHandler" />
+	<beans:bean id="teacherAdminService" class="com.tys.sec.SysTeacherSecService" />
+
+
+	<authentication-manager id="teacher-admin-authentication-manager">
+		<authentication-provider user-service-ref="teacherAdminService">
+			<password-encoder ref="md5PasswordEncoder">
+				<salt-source user-property="username" />
+			</password-encoder>
+		</authentication-provider>
+	</authentication-manager>
+	
+	
+	<!-- 管理后台 -->
+	<http pattern="/sys/**" auto-config="true" use-expressions="false"
+		authentication-manager-ref="admin-authentication-manager">
+		<intercept-url pattern="/sys/**" access="ROLE_ADMIM" />
+
+		<form-login login-page='/login.html' authentication-failure-url="/login.html?error=true"
+			authentication-success-handler-ref="securityAdminHandler"
+			login-processing-url="/sys/adminLogin" username-parameter="account"
+			password-parameter="password" />
+			
+		<logout logout-url="/sys/adminLogout" logout-success-url="/login.html"
+			invalidate-session="true" delete-cookies="true" />
+
+		<session-management
+			session-authentication-error-url="/login.html?serr"
+			invalid-session-url="/login.html?invalid">
+			<concurrency-control max-sessions="1"
+				error-if-maximum-exceeded="false" expired-url="/login.html?ot" />
+		</session-management>
+	</http>
+
+	<beans:bean id="securityAdminHandler" class="com.tys.sec.SysLoginHandler" />
+	<beans:bean id="securityAdminService" class="com.tys.sec.SysSecService" />
+
+
+	<beans:bean id="md5PasswordEncoder"
+		class="org.springframework.security.authentication.encoding.Md5PasswordEncoder" />
+
+
+
+	<authentication-manager id="admin-authentication-manager">
+		<authentication-provider user-service-ref="securityAdminService">
+			<password-encoder ref="md5PasswordEncoder">
+				<salt-source user-property="username" />
+			</password-encoder>
+		</authentication-provider>
+	</authentication-manager>
+
+	<!-- APP登录 -->
+	<http pattern="/app/**" use-expressions="false"
+		authentication-manager-ref="user-auth-manager">
+		<intercept-url pattern="/app/**" access="ROLE_USER" />
+		<form-login login-processing-url="/app/userLogin"
+			login-page="/app/other/noAuthentication" username-parameter="acct"
+			password-parameter="pw" authentication-success-handler-ref="userLoginHandler"
+			authentication-failure-handler-ref="userLoginHandler" />
+		<logout logout-url="/app/userLogout" success-handler-ref="userLoginHandler"
+			invalidate-session="true" />
+
+		<session-management
+			session-authentication-error-url="/app/other/noAuthentication?err=1"
+			invalid-session-url="/app/other/noAuthentication">
+			<concurrency-control max-sessions="1"
+				error-if-maximum-exceeded="false" expired-url="/app/other/noAuthentication?err=1" />
+		</session-management>
+
+	</http>
+
+
+	<beans:bean id="userLoginHandler" class="com.tys.sec.UserLoginHandler" />
+	<beans:bean id="userSecService" class="com.tys.sec.UserSecService" />
+	
+	<authentication-manager id="user-auth-manager">
+		<authentication-provider user-service-ref="userSecService">
+			<password-encoder ref="md5PasswordEncoder">
+				<salt-source user-property="username" />
+			</password-encoder>
+		</authentication-provider>
+	</authentication-manager>
+
+
+
+</beans:beans>
+
+

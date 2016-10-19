@@ -1,0 +1,74 @@
+﻿<!doctype html>
+<html>
+<head>
+<title>平台管理系统</title>
+<meta name="renderer" content="webkit">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+
+
+</head>
+<body>
+	<div class="easyui-navpanel">
+		<div
+			style="margin-top: 100px; text-align: center; margin-bottom: 30px">
+			<!-- <img src="../images/login1.jpg" style="margin: 0"> -->
+			<h2>平台管理系统</h2>
+		</div>
+		<form id="ff" method="post" action="sys/adminLogin">
+			<div style="padding: 0 20px; text-align: center;">
+				<div style="margin-bottom: 10px">
+					<input id="acct" name="account" class="easyui-textbox"
+						data-options="prompt:'用户名',iconCls:'icon-man',required:true"
+						style="width: 300px; height: 38px">
+				</div>
+				<div>
+					<input name="password" class="easyui-textbox" type="password"
+						data-options="prompt:'密码',iconCls:'icon-lock',required:true"
+						style="width: 300px; height: 38px;">
+				</div>
+				<div style="text-align: center; margin-top: 30px">
+					<button class="easyui-linkbutton" onclick="login()" type="submit"
+						style="width: 300px; height: 40px">
+						<span style="font-size: 16px">登&nbsp;&nbsp;&nbsp;录</span>
+					</button>
+				</div>
+				<div style="text-align: center; margin-top: 30px">
+					<p id="error"></p>
+				</div>
+			</div>
+		</form>
+	</div>
+
+	<script type="text/javascript"
+		src="js/jquery/jquery-easyui-1.4.3/jquery.min.js"></script>
+	<script type="text/javascript"
+		src="js/jquery/jquery-easyui-1.4.3/jquery.easyui.min.js"></script>
+	<script type="text/javascript"
+		src="js/jquery/jquery-easyui-1.4.3/locale/easyui-lang-zh_CN.js"></script>
+	<script type="text/javascript" src="js/jquery/jquery.cookie.js"></script>
+
+	<script>
+		if (window != top)
+			top.location.href = location.href;
+
+		if (self.location.href.indexOf("error=true") > 0) {
+			$('#error').html("用户名或密码错误");
+		}
+		if (self.location.href.indexOf("invalid") > 0) {
+			$('#error').html("请重新登录");
+		}
+		if (self.location.href.indexOf("ot") > 0) {
+			$('#error').html("登录已失效,请重新登录");
+		}
+		if (self.location.href.indexOf("serr") > 0) {
+			$('#error').html("您的账号已在其他地方登录");
+		}
+
+		
+		function login() {
+
+			$('#ff').form('submit');
+		}
+	</script>
+</body>
+</html>

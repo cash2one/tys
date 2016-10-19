@@ -1,0 +1,8 @@
+.search-form label{text-align: right;width: 115px;}
+.search-form input{width: 190px;}
+.search-form select{height: 34px;width: 190px;}
+.search-form .table th{border-top:0px;}
+.search-form .table td{border-top:0px;}
+.add-form label{text-align: right;}
+.add-form input{width: 190px;}
+.add-form select{height: 34px;width: 190px;}

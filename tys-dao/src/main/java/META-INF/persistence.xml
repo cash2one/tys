@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence version="2.1"
+	xmlns="http://xmlns.jcp.org/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://xmlns.jcp.org/xml/ns/persistence/persistence_2_1.xsd">
+	
+	<persistence-unit name="tys-dao">
+		<provider>org.hibernate.ejb.HibernatePersistence</provider>
+		<class>com.tys.base.BaseEntity</class>
+		<class>com.tys.entity.AuthCustomPermission</class>
+		<class>com.tys.entity.DArea</class>
+		<class>com.tys.entity.DCity</class>
+		<class>com.tys.entity.DProvince</class>
+		<class>com.tys.entity.InfoPushMsg</class>
+		<class>com.tys.entity.InfoQuestion</class>
+		<class>com.tys.entity.InfoQuestionAnswer</class>
+		<class>com.tys.entity.MdAppAd</class>
+		<class>com.tys.entity.InfoAppNews</class>
+		<class>com.tys.entity.MdAppRunningDay</class>
+		<class>com.tys.entity.MdAttendance</class>
+		<class>com.tys.entity.MdChatClass</class>
+		<class>com.tys.entity.MdClass</class>
+		<class>com.tys.entity.MdCourse</class>
+		<class>com.tys.entity.MdDetector</class>
+		<class>com.tys.entity.MdEquipment</class>
+		<class>com.tys.entity.MdFeedback</class>
+		<class>com.tys.entity.MdFile</class>
+		<class>com.tys.entity.MdGrade</class>
+		<class>com.tys.entity.MdHomeWork</class>
+		<class>com.tys.entity.MdLocation</class>
+		<class>com.tys.entity.MdPoint</class>
+		<class>com.tys.entity.MdPushPara</class>
+		<class>com.tys.entity.MdRtData</class>
+		<class>com.tys.entity.MdSchool</class>
+		<class>com.tys.entity.MdSoftware</class>
+		<class>com.tys.entity.MdStudent</class>
+		<class>com.tys.entity.MdTcpServer</class>
+		<class>com.tys.entity.MdUser</class>
+		<class>com.tys.entity.RelChatClassUser</class>
+		<class>com.tys.entity.RelDetectorSchool</class>
+		<class>com.tys.entity.RelNewsComment</class>
+		<class>com.tys.entity.RelNewsLike</class>
+		<class>com.tys.entity.RelPushUser</class>
+		<class>com.tys.entity.RelQuestionFile</class>
+		<class>com.tys.entity.RelStudentEquipment</class>
+		<class>com.tys.entity.RelStudentGuardian</class>
+		<class>com.tys.entity.RelSysuserArea</class>
+		<class>com.tys.entity.RelSysuserLevel</class>
+		<class>com.tys.entity.RelSysuserPermission</class>
+		<class>com.tys.entity.RelTecherClass</class>
+		<class>com.tys.entity.RelUserStudent</class>
+		<class>com.tys.entity.SysUser</class>
+		<class>com.tys.entity.SysUserLoginHis</class>
+		<class>com.tys.entity.sample.DCity2</class>
+		<class>com.tys.entity.sample.MdUser2</class>
+		<class>com.tys.entity.slim.Agent</class>
+		<class>com.tys.entity.slim.Attendance</class>
+		<class>com.tys.entity.slim.ChatClass</class>
+		<class>com.tys.entity.slim.Employee</class>
+		<class>com.tys.entity.slim.Grade</class>
+		<class>com.tys.entity.slim.HomeWork</class>
+		<class>com.tys.entity.slim.MClass</class>
+		<class>com.tys.entity.slim.Question</class>
+		<class>com.tys.entity.slim.QuestionFile</class>
+		<class>com.tys.entity.slim.QuestionUpdate</class>
+		<class>com.tys.entity.slim.School</class>
+		<class>com.tys.entity.slim.School2</class>
+
+		<properties>
+			<property name="hibernate.dialect" value="org.hibernate.dialect.MySQLDialect" />
+			<!-- <property name="hibernate.dialect" value="org.hibernate.dialect.MySQLMyISAMDialect" 
+				/> <property name="hibernate.dialect" value="org.hibernate.dialect.MySQLInnoDBDialect" 
+				/> -->
+			<property name="hibernate.hbm2ddl.auto" value="none" />
+			<property name="hibernate.show_sql" value="true" />
+			<property name="hibernate.cache.provider_class" value="org.hibernate.cache.HashtableCacheProvider" />
+		</properties>
+
+	</persistence-unit>
+</persistence>

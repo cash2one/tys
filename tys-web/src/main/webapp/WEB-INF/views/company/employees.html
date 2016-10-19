@@ -1,0 +1,518 @@
+<section class="content-header">
+	<h1>公司管理</h1>
+	<ol class="breadcrumb">
+		<li><a href="#"><i class="fa fa-dashboard"></i> 首页</a></li>
+		<li class="active">公司</li>
+		<li class="active">员工管理</li>
+	</ol>
+</section>
+
+<section class="content">
+	<div class="row">
+		<div class="col-md-12">
+			<div class="box box-info">
+				<div class="box-header with-border">
+					<h3 class="box-title">公司员工管理</h3>
+				</div>
+				<div class="box-body">
+					<form id="searchForm" role="form">
+						<div class="row">
+							<div class="col-md-2">
+								<div class="form-group">
+									<label for="">公司名称</label> <input type="text" name="company"
+										class="form-control" placeholder="请输入公司名称">
+								</div>
+							</div>
+
+							<div class="col-md-2">
+								<div class="form-group">
+									<label for="">员工姓名</label> <input type="text" name="name"
+										class="form-control" placeholder="请输入员工名称">
+								</div>
+							</div>
+
+							<div class="col-md-1">
+								<div class="form-group">
+									<label>&nbsp;&nbsp;</label> <a id="search"
+										class="btn btn-block btn-social btn-info"> <i
+										class="fa fa-search"></i> 查询
+									</a>
+								</div>
+							</div>
+						</div>
+					</form>
+				</div>
+
+				<div class="box-footer">
+					<div class="row">
+						<div class="col-sm-2">
+							<a class="btn btn-block btn-social btn-danger"> <i
+								class="fa fa-trash"></i> 批量删除
+							</a>
+						</div>
+						<div class="col-sm-2">
+							<a data-toggle='modal' href="#newModal"
+								class="btn btn-block btn-social btn-success"> <i
+								class="fa fa-plus"></i> 添加
+							</a>
+						</div>
+					</div>
+
+					<div class="row">
+						<div class="col-sm-12" style="padding: 20px;">
+							<table id="employee_table" width="100%"
+								class="table table-bordered table-hover table-striped">
+								<thead>
+									<tr>
+									<th class="center" width="5%"><label> <input
+											type="checkbox" class="ace" id="selectAll" /> <span
+											class="lbl"></span>
+									</label></th>
+										<th>用户账号</th>
+										<th>姓名</th>
+										<th>电话</th>
+										<th>邮箱</th>
+										<th>部门</th>
+										<th>公司名称</th>
+										<th>操作</th>
+									</tr>
+								</thead>
+							</table>
+						</div>
+					</div>
+
+					<div class="container">
+						<div id="newModal" class="modal modal-info" aria-hidden="true">
+							<div class="modal-dialog" style="width: 45%">
+								<div class="modal-content">
+									<div class="modal-header">
+										<a class="close" data-dismiss="modal">×</a>
+										<h4 id="title">员工信息</h4>
+									</div>
+									<div class="modal-body">
+										<form id="newForm" class="form-horizontal" role="form">
+											<input type="hidden" id="empId" name="id">
+											<div class="form-group">
+												<label for="name" class="col-sm-3 control-label">登录名</label>
+												<div class="col-sm-6">
+													<div class="input-group">
+														<div class="input-group-addon">
+															<i class="fa fa-user"></i>
+														</div>
+														<input id="loginName" name="loginName" type="text"
+															class="form-control">
+													</div>
+												</div>
+												<span id="checkMsg" style="color: red;display: none;">此登录名已经被使用！</span>
+											</div>
+											<div class="form-group">
+												<label for="name" class="col-sm-3 control-label">姓名</label>
+												<div class="col-sm-6">
+													<div class="input-group">
+														<div class="input-group-addon">
+															<i class="fa fa-user"></i>
+														</div>
+														<input id="names" name="name" type="text"
+															class="form-control">
+													</div>
+												</div>
+											</div>
+											<div class="form-group" id="pwd">
+												<label for="name" class="col-sm-3 control-label">密码</label>
+												<div class="col-sm-6">
+													<div class="input-group">
+														<div class="input-group-addon">
+															<i class="fa fa-lock"></i>
+														</div>
+														<input id="password" name="password" type="password"
+															class="form-control">
+													</div>
+												</div>
+											</div>
+											<div class="form-group" id="pwd1">
+												<label for="name" class="col-sm-3 control-label">确认密码</label>
+												<div class="col-sm-6">
+													<div class="input-group">
+														<div class="input-group-addon">
+															<i class="fa fa-lock"></i>
+														</div>
+														<input id="confirm_password" name="confirm_password"
+															type="password" class="form-control">
+													</div>
+												</div>
+											</div>
+											<div class="form-group">
+												<label for="phone" class="col-sm-3 control-label">联系电话</label>
+												<div class="col-sm-6">
+													<div class="input-group">
+														<div class="input-group-addon">
+															<i class="fa fa-phone"></i>
+														</div>
+														<input id="phone" name="phone" type="text"
+															class="form-control">
+													</div>
+												</div>
+											</div>
+											<div class="form-group">
+												<label for="phone" class="col-sm-3 control-label">邮箱</label>
+												<div class="col-sm-6">
+													<div class="input-group">
+														<div class="input-group-addon">
+															<i class="fa fa-at"></i>
+														</div>
+														<input type="text" name="email" class="form-control"
+															id="email">
+													</div>
+												</div>
+											</div>
+											<div class="form-group">
+												<label for="phone" class="col-sm-3 control-label">部门</label>
+												<div class="col-sm-6">
+													<div class="input-group">
+														<div class="input-group-addon">
+															<i class="fa fa-users"></i>
+														</div>
+														<input type="text" name="department" class="form-control"
+															id="department">
+													</div>
+												</div>
+											</div>
+											<div class="form-group">
+											<label class="col-sm-3 control-label">权限分配</label>
+											<div class="col-sm-6">
+												<span id="errorMsg" style="display: none;"><font
+													style="color: red">*你必须为这个代理商配置权限！</font></span>
+												<div id="treeview-checkable"></div>
+											</div>
+										</div>
+										</form>
+									</div>
+									<div class="modal-footer">
+										<a href="#" id="newSubmit" class="btn btn-success">提交</a> <a
+											href="#" class="btn btn-default" data-dismiss="modal">取消</a>
+									</div>
+								</div>
+							</div>
+						</div>
+
+						<div id="deleteModal" class="modal modal-warning"
+							aria-hidden="true">
+							<div class="modal-dialog">
+								<div class="modal-content">
+									<div class="modal-header">
+										<a class="close" data-dismiss="modal">×</a>
+										<h4>警告</h4>
+									</div>
+									<div class="modal-body">
+										<p>你确定要删除这条信息吗？</p>
+									</div>
+									<div class="modal-footer">
+										<a id="del" href="#" class="btn btn-danger">确认</a> <a href="#"
+											class="btn btn-default" data-dismiss="modal">取消</a>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</section>
+
+<script>
+	var table,empId;
+	$(function() {
+		
+		$("#selectAll").on('click',function(){
+			var that = this;
+			$("input[name='checkbox']").each(function(){
+				var v = $(that)[0].checked;
+				$(this)[0].checked=v;
+			});
+		});
+		
+		table = $('#employee_table')
+				.DataTable(
+						{
+							language : {
+								url : '${base}/resources/dist/json/DataTableCN.json'
+							},
+							pagingType : "full_numbers",
+							paging : true, //是否分页。
+							processing : true, //当datatable获取数据时候是否显示正在处理提示信息。 
+							serverSide : true,
+							searching : false,
+							ordering : false,
+							ajax : {
+								url : 'getemployeedt'
+							},
+							//必须与table thead中按顺序一一对应
+							columns : [
+							        {
+							        	data : "id"
+							        },
+									{//用户账号
+										data : 'loginName'
+									},
+									{//姓名
+										data : "name"
+									},
+									{//电话
+										data : "phone"
+									},
+									{
+										data : "email"
+									},
+									{
+										data : "department"
+									},
+									{
+										data : function(row, type, set) {
+											return row.company.name;
+										}
+									},
+									{//操作
+										data : function(row, type, set) {
+											return "<a onclick='toUpdateEmployee("
+													+ row.id
+													+ ")' class='btn btn-success btn-xs'>修改</a>&nbsp;&nbsp;"
+													+ "<a data-toggle='modal' onclick='javascript:empId="+row.id+";' href='#deleteModal' class='btn btn-danger btn-xs'>删除</a>";
+										}
+									} ],
+									columnDefs:[{
+										targets: 0,
+							            data: "id",
+							            render: function (data, type, full, meta) {
+							            	return '<input type="checkbox" value="' + data + '" title="' + data + '" id="checkbox" name="checkbox"/>';
+							            }
+									}]
+						});
+
+		var validator = $("#newForm")
+				.validate(
+						{
+							errorElement : 'span',
+							errorClass : 'help-block',
+							focusCleanup : true,
+							rules : {
+								loginName : {
+									required : true,
+									minlength : 6
+								},
+								name : "required",
+								email : {
+									email : true
+								},
+								password : {
+									required : true,
+									minlength : 6,
+									maxlength : 64
+								},
+								confirm_password : {
+									required : true,
+									minlength : 6,
+									maxlength : 64,
+									equalTo : "#password"
+								},
+								phone : {
+									required : true
+								},
+								department : {
+									required : true
+								}
+							},
+							messages : {
+								name : "请输入姓名",
+								loginName : {
+									required : "请输入账户名",
+									minlength : "长度至少为6个字符"
+								},
+								email : {
+									email : "请输入正确的email地址"
+								},
+								password : {
+									required : "请输入密码",
+									minlength : "长度至少为6个字符",
+									maxlength : "密码长度超过最大限制"
+								},
+								confirm_password : {
+									required : "请输入确认密码",
+									minlength : "确认密码不能小于6个字符",
+									maxlength : "密码长度超过最大限制",
+									equalTo : "两次输入密码不一致不一致"
+								},
+								phone : {
+									required : "请输入电话号码"
+								},
+								departmaent : {
+									required : "请输入部门名称"
+								}
+							},
+							//自定义错误消息放到哪里
+							errorPlacement : function(error, element) {
+								element.next().remove();//删除显示图标
+								element
+										.after('<span class="glyphicon glyphicon-remove form-control-feedback" aria-hidden="true"></span>');
+								element.closest('.form-group').append(error);//显示错误消息提示
+							},
+							//给未通过验证的元素进行处理
+							highlight : function(element) {
+								$(element).closest('.form-group').addClass(
+										'has-error has-feedback');
+							},
+							//验证通过的处理
+							success : function(label) {
+								var el = label.closest('.form-group').find(
+										"select");
+								el.next().remove();//与errorPlacement相似
+								el
+										.after('<span class="glyphicon glyphicon-ok form-control-feedback" aria-hidden="true"></span>');
+
+								var el1 = label.closest('.form-group').find(
+										"input");
+								el1.next().remove();//与errorPlacement相似
+								el1
+										.after('<span class="glyphicon glyphicon-ok form-control-feedback" aria-hidden="true"></span>');
+
+								label.closest('.form-group').removeClass(
+										'has-error').addClass(
+										"has-feedback has-success");
+								label.remove();
+							}
+						});
+
+		$('#loginName').keyup(function(){
+			var loginName = $('#loginName').val();
+			AjaxUtils("checkLoginName", "GET", "loginName="+loginName, function(data){
+				if(data.success){
+					$('#checkMsg').show();
+				}else{
+					$('#checkMsg').hide();
+				}
+			});
+		});
+		
+		$('#newSubmit').on('click', function() {
+			if ($('#newForm').valid()) {
+				var param = $('#newForm').serialize();
+				
+				var permissions = [];
+				var nodes = $("#treeview-checkable").jqxTree(
+						'getCheckedItems');
+				
+				if (nodes.length == 0) {
+					$("#errorMsg").show();
+					return false;
+				} else {
+					$("#errorMsg").hide();
+				}
+				
+				for ( var i in nodes) {
+					permissions[i] = nodes[i].value;
+				}
+				var str = permissions.join(",");
+				param += "&permissions=" + str;
+				
+				AjaxUtils("mergeemployee", "POST", param, function() {
+					table.ajax.reload();
+					$('#newModal').modal('hide');
+
+					//还原表单
+					$('#newForm').get(0).reset();
+					validator.resetForm();
+				});
+			}
+		});
+		
+		var removeAgent = $("#del").click(function() {
+			 AjaxUtils("removeemployee", "GET", "id=" + empId, function() {
+				$("#deleteModal").modal('hide');
+				table.ajax.reload();
+			}); 
+		});
+		
+		//添加模态框隐藏后触发改事件
+		$('#newModal').on(
+				'hide.bs.modal',
+				function() {
+					//清除验证错误信息
+					validator.resetForm();
+					//清空表单数据
+					$('#newForm').get(0).reset();
+					$("#pwd,#pwd1").show();
+					
+					$('#treeview-checkable').jqxTree('uncheckAll');
+					//清除错误信息残留样式
+					$('#newModal .form-group').removeClass(
+							"has-error has-success has-feedback");
+					$('#newModal .form-group').find("span").removeClass(
+							"glyphicon-ok glyphicon-remove");
+				});
+		
+		var search = $("#search").click(function() {
+			var param = $("#searchForm").serialize();
+			table.ajax.url('searchemployee?' + param).load();
+		});
+		
+		$.ajax({
+			url : 'gettreeview',
+			type : 'get',
+			dataType : 'json',
+			async : false,
+			success : function(data) {
+				treeData = data;
+			}
+		});
+
+		var source = {
+			datatype : "json",
+			datafields : [ {
+				name : 'id'
+			}, {
+				name : 'parentid'
+			}, {
+				name : 'text'
+			}, {
+				name : 'value'
+			} ],
+			id : 'id',
+			localdata : treeData
+		};
+		// create data adapter.
+		var dataAdapter = new $.jqx.dataAdapter(source);
+		// perform Data Binding.
+		dataAdapter.dataBind();
+		// get the tree items. The first parameter is the item's id. The second parameter is the parent item's id. The 'items' parameter represents 
+		// the sub items collection name. Each jqxTree item has a 'label' property, but in the JSON data, we have a 'text' field. The last parameter 
+		// specifies the mapping between the 'text' and 'label' fields.  
+		var records = dataAdapter.getRecordsHierarchy('id', 'parentid',
+				'items', [ {
+					name : 'text',
+					map : 'label'
+				} ]);
+		$('#treeview-checkable').jqxTree({
+			source : records,
+			hasThreeStates : true,
+			checkboxes : true,
+			theme : "bootstrap"
+		});
+	});
+	
+	function toUpdateEmployee(id){
+		AjaxUtils("toupdateemployee", "GET", "id="+id, function(data){
+			$("#empId").val(data.data.employee.id);
+			$("#loginName").val(data.data.employee.loginName);
+			$("#names").val(data.data.employee.name);
+			$("#phone").val(data.data.employee.phone);
+			$("#email").val(data.data.employee.email);
+			$("#department").val(data.data.employee.department);
+			$.each(data.data.permission, function(i, n) {
+				$("#treeview-checkable").jqxTree('checkItem',
+						$("#" + n.permissionId)[0], true);
+			});
+			$("#pwd,#pwd1").hide();
+			$("#newModal").modal('show');
+		});
+	}
+</script>

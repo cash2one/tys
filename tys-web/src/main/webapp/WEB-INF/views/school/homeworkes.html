@@ -1,0 +1,327 @@
+<section class="content-header">
+	<h1>
+		作业管理 <small></small>
+	</h1>
+	<ol class="breadcrumb">
+		<li><a href="#"><i class="fa fa-dashboard"></i> Home</a></li>
+		<li class="active">作业信息</li>
+	</ol>
+</section>
+
+<section class="content">
+	<div class="row">
+		<div class="col-md-12">
+			<div class="box box-info">
+				<div class="box-header with-border">
+					<h3 class="box-title">作业信息管理</h3>
+				</div>
+				<div class="box-body">
+					<div class="row">
+						<div class="col-md-3">
+							<div class="form-group">
+								<label>省</label>
+								<select id="common_province" class="form-control">
+								</select>
+							</div>
+						</div>
+						<div class="col-md-3">
+							<div class="form-group">
+								<label>市</label>
+								<select id="common_city" class="form-control">
+								</select>
+							</div>
+						</div>
+						<div class="col-md-3">
+							<div class="form-group">
+								<label>区</label>
+								<select id="common_area" class="form-control">
+								</select>
+							</div>
+						</div>
+						<div class="col-md-3">
+							<div class="form-group">
+								<label>课程名称</label>
+								<input type="text" name="s_courseName" class="form-control"  placeholder="请输入学校名称">
+							</div>
+						</div>
+						<div class="col-md-3">
+							<div class="form-group">
+								<label>作业名称：</label>
+								<input type="text" name="s_name" class="form-control"  placeholder="请输入作业名称">
+							</div>
+						</div>
+						<div class="col-md-3">
+							<div class="form-group">
+								<label>发布人：</label>
+								<input type="text" name="s_teacherName" class="form-control"  placeholder="请输入作业名称">
+							</div>
+						</div>
+						<div class="col-sm-2">
+							<div class="form-group">
+								<label></label>
+								<a class="btn btn-block btn-social btn-info">
+									<i class="fa fa-search"></i> 查询
+								</a>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="box-footer">
+					<div class="row">
+						<div class="col-sm-2">
+							<a class="btn btn-block btn-social btn-info">
+								<i class="fa fa-trash"></i> 批量导入
+							</a>
+						</div>
+						<div class="col-sm-2">
+							<a class="btn btn-block btn-social btn-success"  data-toggle="modal" href="#myModal" onclick="initvalue();">
+								<i class="fa fa-plus"></i> 添加
+							</a>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-sm-12" style="padding: 20px;">
+							<table id="data_table" class="table table-bordered table-hover table-striped">
+								<thead>
+									<tr>
+										<th class="center" width="5%">
+											<label>
+												<input type="checkbox" class="ace" id="selectAll"/>
+												<span class="lbl"></span>
+											</label>
+										</th>
+										<th width="10%">作业名称</th>
+										<th width="10%">内容</th>
+										<th width="10%">班级</th>
+										<th width="10%">课程</th>
+										<th width="10%">发布人</th>
+										<th>完成时间</th>
+										<th width="10%">状态</th>
+										<th width="12%">操作</th>
+									</tr>
+								</thead>
+							</table>
+						</div>
+					</div>
+				</div><!-- box-footer end -->
+			</div>
+		</div>
+	</div>
+	
+	<!-- Modal -->
+	<div id="myModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+		<div class="modal-dialog">
+	  		<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+					<h4 class="modal-title" id="myModalLabel">添加作业信息</h4>
+				</div>
+				<div class="modal-body">
+					<form id="add-form" class="form-horizontal add-form" role="form" method="post" action="../sys/mergehomework">
+						<table class="table">
+							<tr>
+								<td align="right"><label>名称：</label></td>
+								<td><input type="hidden" name="editid" value='0'/><input type="text" name="workName"/></td>
+							</tr>
+							<tr>
+								<td align="right"><label>内容：</label></td>
+								<td>
+									<textarea name="workContent"></textarea>
+								</td>
+							</tr>
+							<tr>
+								<td align="right"><label>班级：</label></td>
+								<td>
+									<select name="classId" id="classId"></select>
+								</td>
+							</tr>
+							<tr>
+								<td align="right"><label>课程：</label></td>
+								<td>
+									<select name="gradeId" id="gradeId"></select>
+								</td>
+							</tr>
+							<tr>
+								<td align="right"><label>发布人：</label></td>
+								<td>
+									<input type="date" name="author"/>
+								</td>
+							</tr>
+							<tr>
+								<td align="right"><label>完成时间：</label></td>
+								<td>
+									<input type="date" name="completeTime"/>
+								</td>
+							</tr>
+							<tr>
+								<td align="right"><label>状态：</label></td>
+								<td>
+									<select name="state" id="state">
+										<option value="0">关闭</option>
+										<option value="1">正常</option>
+									</select>
+								</td>
+							</tr>
+						</table>
+					</form>
+				</div>
+				<div class="modal-footer">
+				  	<button type="button" id="add" class="btn btn-small btn-primary">提交</button>
+				  	<button type="button" id="cancel" class="btn btn-small btn-danger" data-dismiss="modal">取消</button>
+				</div>
+			</div>
+		</div>
+	</div><!--PAGE CONTENT ENDS-->
+</section>
+
+<script type="text/javascript">
+var rowHash={};
+$(function() {
+	initAddrElement();
+	var t = $('#data_table').dataTable({
+		language: {
+			url: '${base}/resources/dist/json/DataTableCN.json'
+		},
+		pagingType: "full_numbers",
+		paging: true, //是否分页。
+		processing: true, //当datatable获取数据时候是否显示正在处理提示信息。 
+		serverSide: true,
+		searching:false,
+		ordering:false,
+		select: true,
+		ajax: {
+			url: 'gethomeworkedt'
+		},
+		lengthMenu:  [10, 25, 50, 1],
+		//必须与table thead中按顺序一一对应
+		columns: [{//多选框
+			data: "id"
+		}, {//作业名称
+			data: function(row, type, set){
+				return row.workName;
+			}
+		}, {//作业内容
+			data: function(row, type, set) {
+				return row.workContent;
+			},
+			defaultContent : ''
+		}, {//班级名称
+			data: function(row, type, set){
+				debugger;
+				if (row.hasOwnProperty("mdClass"))
+					return row.mdClass.className;
+				else
+					return "";
+			},
+			defaultContent : ''
+		}, {//课程名称
+			data: function(row, type, set){
+				if (row.hasOwnProperty("mdCourse"))
+					return row.mdCourse.name;
+				else
+					return "";
+			},
+			defaultContent : ''
+		}, {//发布人
+			data: function(row, type, set) {
+				if (row.hasOwnProperty("mdUser")){
+					return row.mdUser.name;
+				}else{
+					return "";
+				}
+			},
+			defaultContent : ''
+		}, {//完成时间
+			data: "completeTime",
+			defaultContent : ''
+		}, {//状态
+			data: function(row, type, set) {
+				return row.state;
+			}
+		}, {//操作
+			data: function(row, type, set) {
+				rowHash[row.id] = row;
+            	return '<input type="button" data-toggle="modal" href="#myModal" onclick="setvalue(' + row.id + ')" class="btn btn-success btn-sm" value="修改" />&nbsp;&nbsp;<input type="button" onclick="removevalue(' + row.id + ', '+ row.className + ')" class="btn btn-danger btn-sm" value="删除" />';
+			},
+		}],
+		columnDefs:[{
+			targets: 0,
+            data: "id",
+            render: function (data, type, full, meta) {
+            	return '<input type="checkbox" value="' + data + '" title="' + data + '" id="checkbox" />';
+            }
+		}]
+	});
+	
+	$("#searchBtn").on('click',function(){
+		
+		
+	});
+	
+	/**/
+	$('#add').on('click', function() {
+		var url ="../sys/mergeclass";
+		var param = $('#add-form').serialize();
+		AjaxUtils(url,'POST',param,function(data){
+			if(data){
+				data = jQuery.parseJSON(data);
+	    		//$("#notice-tip").show();
+	    		//$("#notice-span").html(data.data.notice);
+	    		
+	    		if(data.data.result=="success"){
+		    		$("#myModal").modal('hide');
+	    		}
+	    		alert(data.data.notice);
+	    		
+	    		//TODO 后期修改table刷新
+	    		loadPage('getclass');
+     		}else{
+     			alert('操作失败！');
+     		}
+		});
+	});
+	
+	
+});
+
+function initvalue(){
+	$("input[name='editid']").val(0);
+	$('#add-form')[0].reset();
+}
+
+function setvalue(id){
+	initvalue();
+	var proIdArray = ["schoolId","gradeId","adminId"];
+	var proNameArray = ["className","year"];
+	$("input[name='editid']").val(id);
+	var currentRow = rowHash[id];
+
+	for(var i=0;i<proIdArray.length;i++){
+		$("#"+proIdArray[i]).val(currentRow[proIdArray[i]]);
+	}
+	for(var i=0;i<proNameArray.length;i++){
+		$("input[name='"+proNameArray[i]+"']").val(currentRow[proNameArray[i]]);
+	}
+}
+
+function removevalue(id,name){
+	if(window.confirm('确认删除 '+name+' ？')==true){
+		var url='../sys/removeclass';
+		var param = 'id='+id;
+		AjaxUtils(url,'GET',param,function(data){
+			if(data){
+				data = jQuery.parseJSON(data);
+	    		//$("#notice-tip").show();
+	    		//$("#notice-span").html(data.data.notice);
+	    		
+	    		alert(data.data.notice);
+	    		
+	    		//TODO 后期修改table刷新
+	    		loadPage('getclass');
+     		}else{
+     			alert('操作失败！');
+     		}
+		});
+	}
+}
+</script>
